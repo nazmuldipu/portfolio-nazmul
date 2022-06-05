@@ -16,7 +16,7 @@ export default function Banner({ imageSrc = defaultCardImage }) {
 
                     </div>
                     <div className="flex flex-col justify-center mx-4 py-4">
-                        <h2 className="md:py-2 text-4xl md:text-6xl text-light font-bold font-secondary">Hi, I"m Nazmul Alam</h2>
+                        <h2 className="md:py-2 text-4xl md:text-6xl text-light font-bold font-secondary">Hi, I&apos;m Nazmul Alam</h2>
                         <h3 className="md:py-2 text-2xl md:text-5xl text-accent font-stylus tracking-wider">Frontend Developer.</h3>
                         <div className="md:py-2 flex">
                             <a className="w-auto px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-secondary shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"><span>ABOUT ME</span></a>
