@@ -1,0 +1,7 @@
+:root {
+    /* BASE */
+    /* overrideable variables */
+    --font-primary: "Inter", sans-serif;
+    --font-secondary: "Adobe Garamond Pro", sans-serif;
+    --font-stylus: "The Naturel Txt", sans-serif;
+}
