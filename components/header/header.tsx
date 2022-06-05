@@ -1,10 +1,6 @@
-import { Disclosure } from '@headlessui/react'
-import { FaGithub, FaLinkedin, FaBars, FaTimes } from 'react-icons/fa';
-import Link from 'next/link'
-
-function classNames(...classes: string[]) {
-    return classes.filter(Boolean).join(' ')
-}
+import { Disclosure } from "@headlessui/react"
+import { FaGithub, FaLinkedin, FaBars, FaTimes } from "react-icons/fa";
+import Link from "next/link"
 
 export default function Header() {
     return (
