@@ -72,6 +72,7 @@ export default function Header() {
                                         href="https://www.linkedin.com/in/nazmuldipu/"
                                         aria-label="LinkedIn"
                                         target="_blank"
+                                        rel="noreferrer"
                                     >
                                         <FaLinkedin />
                                     </a>
@@ -80,6 +81,7 @@ export default function Header() {
                                         href="https://github.com/nazmuldipu"
                                         aria-label="GitHub"
                                         target="_blank"
+                                        rel="noreferrer"
                                     >
                                         <span className="sr-only">View notifications</span>
                                         <FaGithub />
@@ -88,7 +90,7 @@ export default function Header() {
                                 <div className="flex-shrink-0">
                                     <Link href="./nazmul_alam_cv.pdf" >
                                         <a className="relative inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"><span>Download CV</span></a>
-                                    </Link>                                   
+                                    </Link>
                                 </div>
 
                             </div>
