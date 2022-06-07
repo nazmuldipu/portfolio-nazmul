@@ -88,9 +88,7 @@ export default function Header() {
                                     </a>
                                 </div>
                                 <div className="flex-shrink-0">
-                                    <Link href="./nazmul_alam_cv.pdf" >
-                                        <a className="relative inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"><span>Download CV</span></a>
-                                    </Link>
+                                    <a href="./nazmul_alam_cv.pdf" className="relative inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" ><span>Download CV</span></a>
                                 </div>
 
                             </div>

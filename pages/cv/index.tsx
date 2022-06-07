@@ -8,16 +8,42 @@ const profile = {
         "Experience in Full Stack Development",
         "Strong web development skills",
         "Cloud and DevOps knowledge"
+    ],
+    skills: [
+        {
+            title: "Languages and Frameworks",
+            names: ["TypeScript", "JavaScript", "Java (Springboot)", "React.js", "Node.js", "Svelte.js", "Angular", "HTML", "CSS", "Bootstrap", "TailwindCSS", "Jest", "11.ty"]
+        },
+        {
+            title: "Tools / Utilites",
+            names: ["Design pattern (Figma)", "Project management software (ZhenHub, Trello, Notion, ClickUP)", "Latex"]
+        },
+        {
+            title: "Web Technologies",
+            names: ["Docker", "Git", "Firebase", "NPM", "Webpack"]
+        },
+        {
+            title: "Databases",
+            names: ["MongoDB", "MySQL", "PostgreSQL", "Firebase"]
+        }
     ]
 }
 
 const ArticleHeader = ({ title, IconComponent }: { title: string, IconComponent: IconType }) => {
     return (<article className="h-16">
-        <div className="relative border-b border-black text-right text-2xl my-2">
-            <IconComponent size={60} className="absolute border rounded-full border-black bg-white p-1" />
+        <div className="relative border-b border-black text-right text-xl my-2">
+            <IconComponent size={50} className="absolute border rounded-full border-black bg-white p-1" />
             <span className="text-primary">{title}</span>
         </div>
     </article>);
+}
+
+const getSkillEle = ({ title, names }: { title: string, names: string[] }) => {
+    return (
+        <article>
+            <header className="text-primary">{title}</header>
+        </article>
+    )
 }
 export default function CV() {
     return (
@@ -35,8 +61,8 @@ export default function CV() {
 
                 <section className="pr-16">
                     <ArticleHeader title="Tech Skills" IconComponent={FaUncharted} />
-                    <ul className="list-disc list-outside text-dark ml-20">
-                        {profile.strength.map(item => <li>{item}</li>)}
+                    <ul className="list-disc list-outside text-dark ml-6">
+                        {profile.skills.map(item => getSkillEle(item))}
                     </ul>
                 </section>
                 <p>চট্টগ্রামের সীতাকুণ্ডের বিএম কনটেইনার ডিপোতে ‘হাইড্রোজেন পারক্সাইড’ নামের বিপুল পরিমাণ দাহ্য রাসায়নিক রয়েছে। ফায়ার সার্ভিস ও ডিপোর কর্মীদের সঙ্গে কথা বলে এ তথ্য জানা গেছে।
