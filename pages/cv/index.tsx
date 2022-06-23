@@ -1,5 +1,5 @@
 import { IconType } from "react-icons";
-import { HiLightBulb } from "react-icons/hi";
+import { HiLightBulb, HiOutlineBriefcase } from "react-icons/hi";
 import { FaUncharted } from "react-icons/fa";
 
 const profile = {
@@ -26,11 +26,58 @@ const profile = {
             title: "Databases",
             names: ["MongoDB", "MySQL", "PostgreSQL", "Firebase"]
         }
+    ],
+    experiences: [
+        {
+            title: "Senior Frontend Developer",
+            company: "ReformedTech",
+            location: "Dhaka",
+            date: "2020 - Present",
+            link: "https://reformedtech.org/",
+            descriptions: [],
+            responsibilities: {
+                opening: "As a Senior Front End Developer, the primary responsibilities for this position include:",
+                list: [
+                    "Build modern client-side web applications using cutting edge technologies.",
+                    "Work seamlessly with the rest of the development team (e.g. back-end & front-end developers).",
+                    "Work in an agile environment and Iterate quickly based on customer and internal feedback.",
+                    "Participating in design discussions, helping to decide company's best ways of building new features",
+                    "Mentor others in my areas of expertise."
+                ]
+            },
+            projects: [{
+                title: "Theameswell Hotel",
+                description: "",
+                link: "",
+                note: ""
+            }]
+        }
     ]
 }
 
+const getExperienceEle = (experience: any) => {
+    return <article >
+        <div>{experience.titile}</div>
+        <div>
+            <div>{experience.company}, {experience.location}</div>
+            <div>{experience.date}</div>
+        </div>
+        <div>
+            <div>{experience.responsibilities.opening}</div>
+            <ul>
+                {experience.responsibilities.list.map((li: string) => <li>{li}</li>)}
+            </ul>
+        </div>
+        <div>
+            <div>Projects</div>
+            <ul>
+            </ul>
+        </div>
+    </article>
+}
+
 const ArticleHeader = ({ title, IconComponent }: { title: string, IconComponent: IconType }) => {
-    return (<article className="h-16">
+    return (<article key={title} className="h-16">
         <div className="relative border-b border-black text-right text-xl my-2">
             <IconComponent size={50} className="absolute border rounded-full border-black bg-white p-1" />
             <span className="text-primary">{title}</span>
@@ -40,11 +87,15 @@ const ArticleHeader = ({ title, IconComponent }: { title: string, IconComponent:
 
 const getSkillEle = ({ title, names }: { title: string, names: string[] }) => {
     return (
-        <article>
+        <article key={title} className="pb-4">
             <header className="text-primary">{title}</header>
+            <ul className="list-disc list-outside text-dark ml-20">
+                <li>{names.map(name => name).join(", ")}.</li>
+            </ul>
         </article>
     )
 }
+
 export default function CV() {
     return (
         <div className="grid grid-cols-7 gap-2">
@@ -55,15 +106,20 @@ export default function CV() {
                 <section className="pr-16">
                     <ArticleHeader title="Key Strength" IconComponent={HiLightBulb} />
                     <ul className="list-disc list-outside text-dark ml-20">
-                        {profile.strength.map(item => <li>{item}</li>)}
+                        {profile.strength.map(item => <li key={item}>{item}</li>)}
                     </ul>
                 </section>
 
                 <section className="pr-16">
                     <ArticleHeader title="Tech Skills" IconComponent={FaUncharted} />
-                    <ul className="list-disc list-outside text-dark ml-6">
+                    <div className="list-disc list-outside text-dark ml-6">
                         {profile.skills.map(item => getSkillEle(item))}
-                    </ul>
+                    </div>
+                </section>
+
+                <section className="pr-16">
+                    <ArticleHeader title="Experience" IconComponent={HiOutlineBriefcase} />
+                    {profile.experiences.map(exp => getExperienceEle(exp))}
                 </section>
                 <p>চট্টগ্রামের সীতাকুণ্ডের বিএম কনটেইনার ডিপোতে ‘হাইড্রোজেন পারক্সাইড’ নামের বিপুল পরিমাণ দাহ্য রাসায়নিক রয়েছে। ফায়ার সার্ভিস ও ডিপোর কর্মীদের সঙ্গে কথা বলে এ তথ্য জানা গেছে।
 
