@@ -11,6 +11,8 @@ module.exports = {
                 'light': '#F2F2F2',
                 'dark': '#2F2F2F',
                 'accent': '#58C2C0',
+                'text-primary': '#374151',
+                'text-secondary': '#4b5563',
             },
             fontFamily: {
 				primary: ["var(--font-primary)"],
@@ -21,8 +23,3 @@ module.exports = {
     },
     plugins: [],
 };
-
-// #C2585A
-// #C2C058
-// #58C2C0
-// #585AC2
