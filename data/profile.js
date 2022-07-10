@@ -15,12 +15,12 @@ const profile = {
                 link: "mailto:nazmuldipu@gmail.com"
             },
             {
-                icon: "FaMapMarkerAlt",
+                icon: "FaPhoneAlt",
                 text: "+880 1912 239643",
                 link: "tel:+8801912239643"
             },
             {
-                icon: "FaPhoneAlt",
+                icon: "FaLink",
                 text: "nazmul.monerbari.com",
                 link: "https://nazmul.monerbari.com"
             },
@@ -56,6 +56,19 @@ const profile = {
             icon: "FaCamera",
             text: "Photography"
         }]
+    },
+    right: {
+        education: [{
+            title: "Master of Science in Information Technology",
+            institute: "University of Stuttgart, Germany",
+            time: "October 2010 - May 2013",
+            text: "Specialization in embedded Systems. Also, known Industrial Automation, Distributed Programming."
+        }, {
+            title: "Bachelor of Science in Electrical and Electronics Engineering (EEE)",
+            institute: "United International University, Dhaka",
+            time: "June 2006 - September 2009",
+            text: "Major: Electronics"
+        }],
     },
     strength: [
         "Ali builds responsive websites and cross-border testing across various devices including desktop, mobile and tablet",
