@@ -5,7 +5,17 @@ import Image from "next/image"
 import defaultCardImage from "../../public/nazmul2.png";
 import profile from "../../data/profile";
 
-const components = {
+interface Icon {
+    "FaMapMarkerAlt": IconType,
+    "HiMail": IconType,
+    "FaPhoneAlt": IconType,
+    "FaLinkedin": IconType,
+    "FaGithub": IconType,
+    "FaLink": IconType,
+    "FaLuggageCart": IconType,
+    "FaCamera": IconType,
+}
+const components: Icon = {
     "FaMapMarkerAlt": FaMapMarkerAlt,
     "HiMail": HiMail,
     "FaPhoneAlt": FaPhoneAlt,
@@ -44,7 +54,7 @@ export default function CV() {
                 <div className="py-2">
                     {leftTitle("Contact")}
                     {obj.contact.map(({ text, icon, link }: { text: string, icon: string, link: string }) => {
-                        const IconComponent: IconType = components[icon];
+                        const IconComponent: IconType = components[icon as keyof typeof components]
                         return (
                             <div className="flex items-center pb-1" key={icon}>
                                 <IconComponent size={16} />
@@ -73,7 +83,7 @@ export default function CV() {
                 <div className="pt-2 pb-4">
                     {leftTitle('Interests')}
                     {obj.interests.map(({ text, icon }: { text: string, icon: string }) => {
-                        const IconComponent: IconType = components[icon];
+                        const IconComponent: IconType = components[icon as keyof typeof components];
                         return (
                             <div className="flex items-center pb-1" key={text}>
                                 <IconComponent size={16} />
