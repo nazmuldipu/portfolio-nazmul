@@ -69,6 +69,106 @@ const profile = {
             time: "June 2006 - September 2009",
             text: "Major: Electronics"
         }],
+        experiences: [{
+                title: "Senior Frontend Developer",
+                company: "ReformedTech",
+                location: "Dhaka",
+                time: "June 2021 - Present",
+                link: "https://reformedtech.org/",
+                descriptions: [],
+                responsibilities: {
+                    opening: "As a Senior Front End Developer, the primary responsibilities for this position include:",
+                    list: [
+                        "Build modern client-side web applications using cutting edge technologies.",
+                        "Work seamlessly with the rest of the development team (e.g. back-end & front-end developers).",
+                        "Work in an agile environment and Iterate quickly based on customer and internal feedback.",
+                        "Participating in design discussions, helping to decide company's best ways of building new features",
+                        "Mentor others in my areas of expertise."
+                    ]
+                },
+                projects: [{
+                    title: "Theameswell Hotel",
+                    description: "",
+                    link: "",
+                    note: ""
+                }]
+            }, {
+                title: "Software Developer",
+                company: "Unolo Technology Limited",
+                location: "Dhaka",
+                time: "March 2019 - May 2021",
+                link: "https://unololtd.com/",
+                descriptions: [],
+                responsibilities: {
+                    opening: "As a Software Developer, the primary responsibilities for this position include:",
+                    list: [
+                        "As a full-stack software developer my responsibilities are Design, build, and maintain efficient, reusable, and reliable Java code for back-end and Angular code for front-end. Ensure the best possible performance, quality, and responsiveness of the applications. Identify bottlenecks and bugs, and devise solutions to these problems. Help maintain code quality, organisation, and automation.",
+                        "Analyzed systems flow, data usage, and work processes; investigated 100% of problem areas ",
+                        "Developed and executed 200+ test procedures for software components",
+                        "Developed code following common security practices and development design patterns",
+                        "Analyzed 30+ user requirements to derive technical software design and performance requirements"
+                    ]
+                },
+                projects: [{
+                    title: "Theameswell Hotel",
+                    description: "",
+                    link: "",
+                    note: ""
+                }]
+            }, {
+                title: "Software Developer",
+                company: "Monerbari Technology Limited",
+                location: "Dhaka",
+                time: "February 2017 - January 2019",
+                link: "https://monerbari.com/",
+                descriptions: ["As a software developer, my main tasks are developing and implementing feature re- quirements for the Angular, REST API architecture, testing and debug backend."],
+                responsibilities: {
+                    opening: "",
+                    list: []
+                },
+                projects: [{
+                    title: "Theameswell Hotel",
+                    description: "",
+                    link: "",
+                    note: ""
+                }]
+            },
+            {
+                title: "Lecturer (PT)",
+                company: "United International University (UIU)",
+                location: "Dhaka",
+                time: "September 2014 - January 2017",
+                link: "https://www.uiu.ac.bd/",
+                descriptions: ["As a lecturer, I have attended structured programming language courses (Theory and Laboratory)."],
+                responsibilities: {
+                    opening: "",
+                    list: []
+                },
+                projects: [{
+                    title: "Theameswell Hotel",
+                    description: "",
+                    link: "",
+                    note: ""
+                }]
+            }
+        ],
+        skills: [{
+                title: "Languages and Frameworks",
+                names: ["TypeScript", "JavaScript", "Java (Springboot)", "React.js", "Node.js", "Svelte.js", "Angular", "HTML", "CSS", "Bootstrap", "TailwindCSS", "Jest", "11.ty"]
+            },
+            {
+                title: "Tools / Utilites",
+                names: ["Design pattern (Figma)", "Project management software (ZhenHub, Trello, Notion, ClickUP)", "Latex"]
+            },
+            {
+                title: "Web Technologies",
+                names: ["Docker", "Git", "Firebase", "NPM", "Webpack"]
+            },
+            {
+                title: "Databases",
+                names: ["MongoDB", "MySQL", "PostgreSQL", "Firebase"]
+            }
+        ],
     },
     strength: [
         "Ali builds responsive websites and cross-border testing across various devices including desktop, mobile and tablet",
@@ -76,47 +176,7 @@ const profile = {
         "Strong web development skills",
         "Cloud and DevOps knowledge"
     ],
-    skills: [{
-            title: "Languages and Frameworks",
-            names: ["TypeScript", "JavaScript", "Java (Springboot)", "React.js", "Node.js", "Svelte.js", "Angular", "HTML", "CSS", "Bootstrap", "TailwindCSS", "Jest", "11.ty"]
-        },
-        {
-            title: "Tools / Utilites",
-            names: ["Design pattern (Figma)", "Project management software (ZhenHub, Trello, Notion, ClickUP)", "Latex"]
-        },
-        {
-            title: "Web Technologies",
-            names: ["Docker", "Git", "Firebase", "NPM", "Webpack"]
-        },
-        {
-            title: "Databases",
-            names: ["MongoDB", "MySQL", "PostgreSQL", "Firebase"]
-        }
-    ],
-    experiences: [{
-        title: "Senior Frontend Developer",
-        company: "ReformedTech",
-        location: "Dhaka",
-        date: "2020 - Present",
-        link: "https://reformedtech.org/",
-        descriptions: [],
-        responsibilities: {
-            opening: "As a Senior Front End Developer, the primary responsibilities for this position include:",
-            list: [
-                "Build modern client-side web applications using cutting edge technologies.",
-                "Work seamlessly with the rest of the development team (e.g. back-end & front-end developers).",
-                "Work in an agile environment and Iterate quickly based on customer and internal feedback.",
-                "Participating in design discussions, helping to decide company's best ways of building new features",
-                "Mentor others in my areas of expertise."
-            ]
-        },
-        projects: [{
-            title: "Theameswell Hotel",
-            description: "",
-            link: "",
-            note: ""
-        }]
-    }]
+
 }
 
 export default profile;

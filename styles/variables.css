@@ -1,8 +1,8 @@
 :root {
     /* BASE */
     /* overrideable variables */
-    --font-primary: "Open Sans", sans-serif;
-    --font-secondary: "Montserrat", sans-serif;
+    --font-primary: "Montserrat", sans-serif;
+    --font-secondary: "Playfair Display", sans-serif;
     --font-stylus: "The Naturel Txt", sans-serif;
     --text-primary: #374151;
 }
