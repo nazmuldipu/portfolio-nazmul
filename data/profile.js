@@ -58,6 +58,12 @@ const profile = {
         }]
     },
     right: {
+        strength: [
+            "Nazmul builds responsive websites and cross-border testing across various devices including desktop, mobile and tablet",
+            "Experience in Full Stack Development",
+            "Strong web development skills",
+            "Cloud and DevOps knowledge"
+        ],
         education: [{
             title: "Master of Science in Information Technology",
             institute: "University of Stuttgart, Germany",
@@ -170,12 +176,7 @@ const profile = {
             }
         ],
     },
-    strength: [
-        "Ali builds responsive websites and cross-border testing across various devices including desktop, mobile and tablet",
-        "Experience in Full Stack Development",
-        "Strong web development skills",
-        "Cloud and DevOps knowledge"
-    ],
+
 
 }
 
