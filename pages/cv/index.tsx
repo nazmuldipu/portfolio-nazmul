@@ -193,8 +193,8 @@ export default function CV() {
 
     return (
         <div className="flex flex-col md:flex-row gap-4">
-            {LeftEle(profile.left)}
-            {RightEle(profile.right)}
+            {LeftEle(profile.cv.left)}
+            {RightEle(profile.cv.right)}
         </div>
     )
 }

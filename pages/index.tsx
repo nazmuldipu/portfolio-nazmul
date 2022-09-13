@@ -5,6 +5,8 @@ import Footer from "../components/footer/footer"
 import Header from "../components/header/header"
 import styles from "../styles/Home.module.css"
 import Banner from "./../components/banner/banner";
+import About from '../components/about';
+import profile from "../data/profile";
 
 const Home: NextPage = () => {
   return (
@@ -17,6 +19,7 @@ const Home: NextPage = () => {
 
       <Header />
       <Banner />
+      <About about={profile.index.about} />
       Body
       <Footer />
 
@@ -64,7 +67,7 @@ const Home: NextPage = () => {
       <footer className={styles.footer}>
         <a
           href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank" 
+          target="_blank"
           rel="noopener noreferrer"
         >
           Powered by{" "}
