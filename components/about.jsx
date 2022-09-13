@@ -19,7 +19,7 @@ const About = ({ about }) => {
 
   const renderInfo = (label, text) => {
     return (
-      <article className="my-2" key={text}>
+      <article className="my-2 text-sm md:text-base" key={text}>
         <div className="text-accent">{label}</div>
         <div className="font-semibold">{text}</div>
       </article>
@@ -27,7 +27,7 @@ const About = ({ about }) => {
   };
   const getDetails = (details) => {
     return (
-      <section className="grid grid-cols-2">
+      <section className="grid grid-cols-2 gap-3">
         {renderInfo("Name", details.name)}
         {renderInfo("Phone", details.phone)}
         {renderInfo("Email", details.email)}
