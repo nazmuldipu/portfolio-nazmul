@@ -1,5 +1,7 @@
 import { BsFillGridFill } from "react-icons/bs";
 import { useState } from "react";
+import defaultIdeaImage from "../public/idea.png";
+import Image from "next/image";
 
 const Tabs = {
   details: "My details",
@@ -8,7 +10,7 @@ const Tabs = {
   experience: "Experience",
 };
 
-const About = ({ about }) => {
+const About = ({ about, imageSrc = defaultIdeaImage }) => {
   const [tab, setTab] = useState(Tabs.details);
 
   const handleTabChange = (e) => {
@@ -19,7 +21,7 @@ const About = ({ about }) => {
 
   const renderInfo = (label, text) => {
     return (
-      <article className="my-2 text-sm md:text-base" key={text}>
+      <article className="my-2 text-sm md:text-base" key={label}>
         <div className="text-accent">{label}</div>
         <div className="font-semibold">{text}</div>
       </article>
@@ -59,13 +61,22 @@ const About = ({ about }) => {
   return (
     <section className="about max-w-7xl mx-auto px-6 md:px-8 py-10 md:py-16 font-primary">
       <div className="grid gap-4 md:grid-cols-2">
-        <div>Picture</div>
+        <div className="hidden md:block">
+          <Image
+            src={imageSrc}
+            alt="image-alt-text"
+            sizes="200 400 650 800"
+            layout="responsive"
+            objectFit="cover"
+            loading="lazy"
+          />
+        </div>
         <div>
           <div className="uppercase flex items-center">
-            <BsFillGridFill />{" "}
+            <BsFillGridFill />
             <span className="pl-1 text-primary">{about.title}</span>
           </div>
-          <div className="font-secondary capitalize text-6xl font-semibold tracking-wide leading-tight py-4">
+          <div className="font-secondary capitalize text-3xl md:text-6xl font-semibold tracking-wide leading-tight py-4">
             {about.subtitle}
           </div>
           <div className="text-sm leading-relaxed">{about.description}</div>

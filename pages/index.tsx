@@ -1,10 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import Image from "next/image";
-import Footer from "../components/footer/footer";
-import Header from "../components/header/header";
-import styles from "../styles/Home.module.css";
-import Banner from "./../components/banner/banner";
+import Navbar from "../components/Templates/navbar";
+import Banner from "../components/Templates/banner";
 import About from "../components/about";
 import profile from "../data/profile";
 
@@ -20,7 +17,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Header />
+      <Navbar />
       <Banner />
       <About about={profile.index.about} />
       {/* Body

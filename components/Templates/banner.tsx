@@ -1,10 +1,6 @@
 import Image from "next/image"
 import defaultCardImage from "../../public/nazmul2.png";
 
-// const sanityIoImageLoader = ({ src, width, quality }) => {
-//     return `https://cdn.sanity.io/${src}?w=${width}&q=${quality || 75}`
-// }
-
 export default function Banner({ imageSrc = defaultCardImage }) {
     return (
         <div className="bg-primary font-primary">
