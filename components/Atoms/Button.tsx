@@ -30,6 +30,7 @@ const backgroundColors = {
   text: "bg-light hover:bg-secondary dark:bg-gray-800 dark:hover:bg-blue-500",
   social:
     "bg-transparent hover:bg-light dark:bg-gray-800 dark:hover:bg-blue-500",
+  nav: "bg-transparent hover:bg-light",
 };
 
 const border = {
@@ -81,7 +82,9 @@ const Button = ({
     ];
     return (
       <Link href={href}>
-        <a className={linkClasses.join(" ")}>{children}</a>
+        <a className={linkClasses.join(" ")} target={target}>
+          {children}
+        </a>
       </Link>
     );
   }
