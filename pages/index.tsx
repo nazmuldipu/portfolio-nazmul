@@ -4,6 +4,7 @@ import Navbar from "../components/Templates/navbar";
 import Banner from "../components/Templates/banner";
 import About from "../components/about";
 import profile from "../data/profile";
+import Experience from "../components/Experience";
 
 const Home: NextPage = () => {
   return (
@@ -20,6 +21,7 @@ const Home: NextPage = () => {
       <Navbar />
       <Banner />
       <About about={profile.index.about} />
+      <Experience contribution={profile.index.contribution} />
       {/* Body
       <Footer /> */}
     </div>

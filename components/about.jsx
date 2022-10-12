@@ -2,6 +2,7 @@ import { BsFillGridFill } from "react-icons/bs";
 import { useState } from "react";
 import defaultIdeaImage from "../public/idea.png";
 import Image from "next/image";
+import SectionTitle from "./Molecules/sectionTitle";
 
 const Tabs = {
   details: "My details",
@@ -72,14 +73,11 @@ const About = ({ about, imageSrc = defaultIdeaImage }) => {
           />
         </div>
         <div>
-          <div className="uppercase flex items-center">
-            <BsFillGridFill />
-            <span className="pl-1 text-primary">{about.title}</span>
-          </div>
-          <div className="font-secondary capitalize text-3xl md:text-6xl font-semibold tracking-wide leading-tight py-4">
-            {about.subtitle}
-          </div>
-          <div className="text-sm leading-relaxed">{about.description}</div>
+          <SectionTitle
+            title={about.title}
+            subtitle={about.subtitle}
+            description={about.description}
+          />
           <div className="grid grid-cols-3 text-center border border-light mt-4 mb-2 rounded">
             <div
               className={`py-2 cursor-pointer ${
