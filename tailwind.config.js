@@ -18,6 +18,7 @@ module.exports = {
 				primary: ["var(--font-primary)"],
 				secondary: ["var(--font-secondary)"],
                 stylus: ["var(--font-stylus)"],
+                mono: ["var(--font-mono)"],
 			},
         },
     },

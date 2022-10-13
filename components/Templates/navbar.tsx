@@ -1,7 +1,5 @@
 import { Disclosure } from "@headlessui/react";
 import { FaGithub, FaLinkedin, FaBars, FaTimes } from "react-icons/fa";
-import Link from "next/link";
-import ButtonLink from "../Atoms/ButtonLink";
 import Button from "../Atoms/Button";
 
 export default function Header() {
