@@ -19,7 +19,7 @@ const padding = "px-4 py-2 rounded-md";
 const color = {
   primary: "text-white dark:text-salt-200",
   secondary: "text-white dark:text-slate-200",
-  text: "text-slate-700 hover:text-white dark:text-slate-200 dark:hover:text-white",
+  text: "text-slate-700",
   social: "text-gray-400 hover:text-gray-500",
   nav: "text-gray-500 hover:text-gray-700",
 };
@@ -27,7 +27,7 @@ const color = {
 const backgroundColors = {
   primary: "bg-primary",
   secondary: "bg-secondary",
-  text: "bg-light hover:bg-secondary dark:bg-gray-800 dark:hover:bg-blue-500",
+  text: "font-mono px-0 hover:text-blue-500",
   social:
     "bg-transparent hover:bg-light dark:bg-gray-800 dark:hover:bg-blue-500",
   nav: "bg-transparent hover:bg-light",
@@ -78,7 +78,7 @@ const Button = ({
   if (href) {
     let linkClasses = [
       ...baseClasses,
-      "flex items-center justify-center whitespace-nowrap",
+      "items-center whitespace-nowrap",
     ];
     return (
       <Link href={href}>
