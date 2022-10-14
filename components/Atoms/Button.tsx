@@ -17,8 +17,8 @@ const textSize = "text-sm lg:text-base";
 const padding = "px-4 py-2 rounded-md";
 
 const color = {
-  primary: "text-white dark:text-salt-200",
-  secondary: "text-white dark:text-slate-200",
+  primary: "text-white",
+  secondary: "text-white",
   text: "text-slate-700",
   social: "text-gray-400 hover:text-gray-500",
   nav: "text-gray-500 hover:text-gray-700",
@@ -29,7 +29,7 @@ const backgroundColors = {
   secondary: "bg-secondary",
   text: "font-mono px-0 hover:text-blue-500",
   social:
-    "bg-transparent hover:bg-light dark:bg-gray-800 dark:hover:bg-blue-500",
+    "bg-transparent hover:bg-light",
   nav: "bg-transparent hover:bg-light",
 };
 

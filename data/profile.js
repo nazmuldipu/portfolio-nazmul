@@ -28,8 +28,13 @@ const profile = {
             ],
             experience: [
                 {
+                    title: "Senior Software Engineer",
+                    time: "October 2022 - Present",
+                    company: "CEFALO",
+                },
+                {
                     title: "Senior Frontend Developer",
-                    time: "June 2021 - Present",
+                    time: "June 2021 - September 2022",
                     company: "ReformedTech",
                 },
                 {
@@ -245,10 +250,37 @@ const profile = {
             ],
             experiences: [
                 {
+                    title: "Senior Software Engineer",
+                    company: "CEFALO",
+                    location: "Dhaka",
+                    time: "October 2022 - Current",
+                    link: "https://www.cefalo.com/",
+                    descriptions: [],
+                    responsibilities: {
+                        opening:
+                            "As a Senior Software Engineer, the primary responsibilities for this position include:",
+                        list: [
+                            "Develop and support software including applications, database integration, interfaces, and new functionality enhancements",
+                            "Understand complex business and functional requirements and provide direction in technical specifications and product requirements.",
+                            "Lead technical design and code reviews for all new enhancements and work delivered; can sign off on small features",
+                            "Support test and deployment of new products and features.",
+                            "Perform other duties as assigned.",
+                        ],
+                    },
+                    projects: [
+                        {
+                            title: "",
+                            description: "",
+                            link: "",
+                            note: "",
+                        },
+                    ],
+                },
+                {
                     title: "Senior Frontend Developer",
                     company: "ReformedTech",
                     location: "Dhaka",
-                    time: "June 2021 - Present",
+                    time: "June 2021 - September 2022",
                     link: "https://reformedtech.org/",
                     descriptions: [],
                     responsibilities: {
