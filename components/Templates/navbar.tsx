@@ -1,6 +1,7 @@
 import { Disclosure } from "@headlessui/react";
 import { FaGithub, FaLinkedin, FaBars, FaTimes } from "react-icons/fa";
 import Button from "../Atoms/Button";
+import Image from "next/image";
 
 export default function Header() {
   return (
@@ -22,17 +23,23 @@ export default function Header() {
                   </Disclosure.Button>
                 </div>
                 <div className="flex-shrink-0 flex items-center">
-                  <img
+                  <Image
                     className="h-8 w-auto"
-                    src="./nazmul.svg"
+                    src="/nazmul.svg"
                     alt="Workflow"
+                    width={500} // or the width of your image
+                    height={300} // or the height of your image
                   />
                 </div>
               </div>
               <div className="flex">
                 <div className="hidden md:ml-6 md:flex md:space-x-4">
                   {/* Current: "border-indigo-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" */}
-                  <Button href="/" type="nav" className="!border-indigo-500 !text-gray-900">
+                  <Button
+                    href="/"
+                    type="nav"
+                    className="!border-indigo-500 !text-gray-900"
+                  >
                     Home
                   </Button>
                   <Button href="/blog" type="nav">
