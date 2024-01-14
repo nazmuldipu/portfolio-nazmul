@@ -71,14 +71,14 @@ const Experience: FunctionComponent<PageProps> = ({ contribution }) => {
             </div>
           </div>
           <div className="relative h-80">
-            <Image
+            {/* <Image
               src={`/${project.image}`}
               alt="image-alt-text"
               sizes="200 400 650 800"
               layout="fill"
               objectFit="contain"
               loading="lazy"
-            />
+            /> */}
           </div>
         </div>
       </>

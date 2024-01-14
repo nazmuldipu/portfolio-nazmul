@@ -81,11 +81,11 @@ const Button = ({
       "items-center whitespace-nowrap",
     ];
     return (
-      <Link href={href}>
-        <a className={linkClasses.join(" ")} target={target}>
-          {children}
-        </a>
-      </Link>
+      (<Link href={href} className={linkClasses.join(" ")} target={target}>
+
+        {children}
+
+      </Link>)
     );
   }
 
