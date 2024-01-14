@@ -1,5 +1,5 @@
 import { createClient } from "@sanity/client";
-import { apiVersion, dataset, projectId } from "@/sanity/lib/api";
+import { apiVersion, dataset, projectId } from "@/src/sanity/lib/api";
 
 export const client = createClient({
   projectId,
@@ -10,9 +10,9 @@ export const client = createClient({
 });
 
 // uses GROQ to query content: https://www.sanity.io/docs/groq
-export async function getNavbar() {
+export async function getProfile() {
   const posts = await client.fetch(
-    '*[_type == "navbar"][0]{ title, names[]{name, href, isSubMenu}, email, phone, socials, logo }'
+    '*[_type == "portfolio"][0]{about,experience,education,lastEducation,navbar,location,headline,image{"url": asset->url},title,skills,name}'
   );
   return posts;
 }

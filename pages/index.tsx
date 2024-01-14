@@ -1,15 +1,16 @@
-import type { NextPage } from "next";
 import Head from "next/head";
-import Navbar from "../components/Templates/navbar";
-import Banner from "../components/Templates/banner";
-import About from "../components/about";
-import profile from "../data/profile";
-import Experience from "../components/Experience";
-import Footer from "../components/Templates/footer";
-import { getNavbar } from "@/sanity/lib/client";
+import Banner from "@/src/components/Templates/banner";
+import About from "@/src/components/about";
+import profile from "@/src/data/profile";
+import Experience from "@/src/components/Experience";
+import Footer from "@/src/components/Templates/footer";
+import { getProfile } from "@/src/sanity/lib/client";
+import { formatSanityData } from "@/src/utils/utils";
+import NavbarComponent from "@/src/components/Templates/navbar";
 
 const Home = ({ data }: { data: any }): JSX.Element => {
-  console.log({ data });
+  const fd = formatSanityData(data);
+  // console.log({ data });
   return (
     <div>
       <Head>
@@ -21,7 +22,7 @@ const Home = ({ data }: { data: any }): JSX.Element => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Navbar />
+      <NavbarComponent navbar={fd.navbar} />
       <Banner />
       <About about={profile.index.about} />
       <Experience contribution={profile.index.contribution} />
@@ -31,7 +32,7 @@ const Home = ({ data }: { data: any }): JSX.Element => {
 };
 
 export async function getStaticProps() {
-  const data = await getNavbar();
+  const data = await getProfile();
 
   return {
     props: {
