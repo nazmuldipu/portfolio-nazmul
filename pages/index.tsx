@@ -4,7 +4,7 @@ import About from "@/src/components/about";
 import profile from "@/src/data/profile";
 import Experience from "@/src/components/Experience";
 import Footer from "@/src/components/Templates/footer";
-import { getProfile } from "@/src/sanity/lib/client";
+import { getProfile } from "@/src/sanity/lib/queries";
 import { formatSanityData } from "@/src/utils/utils";
 import NavbarComponent from "@/src/components/Templates/navbar";
 

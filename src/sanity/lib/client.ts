@@ -8,11 +8,3 @@ export const client = createClient({
   apiVersion, // use current date (YYYY-MM-DD) to target the latest API version
   // token: process.env.SANITY_SECRET_TOKEN // Only if you want to update content with the client
 });
-
-// uses GROQ to query content: https://www.sanity.io/docs/groq
-export async function getProfile() {
-  const posts = await client.fetch(
-    '*[_type == "portfolio"][0]{about,experience,education,lastEducation,navbar,location,headline,image{"url": asset->url},title,skills,name}'
-  );
-  return posts;
-}
