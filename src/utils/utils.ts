@@ -82,7 +82,7 @@ export const formatSanityData = (data: any): PortFolio => {
   const education = getEducation(data.education);
   const experience = getExperience(data.experience);
   const headline: PortableTextBlock[] = data.headline;
-  const image: string = data.image.url;
+  const image: string = data.image;
   const lastEducation: string = data.lastEducation;
   const location = { country: data.location.country, city: data.location.city };
   const name: string = data.name;

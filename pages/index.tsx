@@ -10,7 +10,7 @@ import NavbarComponent from "@/src/components/Templates/navbar";
 
 const Home = ({ data }: { data: any }): JSX.Element => {
   const fd = formatSanityData(data);
-  // console.log({ data });
+  console.log({ fd, data });
   return (
     <div>
       <Head>
@@ -23,7 +23,7 @@ const Home = ({ data }: { data: any }): JSX.Element => {
       </Head>
 
       <NavbarComponent navbar={fd.navbar} />
-      <Banner />
+      <Banner name={fd.name} about={fd.about} image={fd.image} />
       <About about={profile.index.about} />
       <Experience contribution={profile.index.contribution} />
       <Footer />

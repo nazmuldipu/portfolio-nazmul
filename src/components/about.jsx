@@ -63,14 +63,14 @@ const About = ({ about, imageSrc = defaultIdeaImage }) => {
     <section className="about max-w-7xl mx-auto px-6 md:px-8 py-10 md:py-16 font-primary">
       <div className="grid gap-4 md:grid-cols-2">
         <div className="hidden md:block">
-          {/* <Image
+          <Image
             src={imageSrc}
             alt="image-alt-text"
             sizes="200 400 650 800"
             layout="responsive"
             objectFit="cover"
             loading="lazy"
-          /> */}
+          />
         </div>
         <div>
           <SectionTitle

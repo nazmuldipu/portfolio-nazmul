@@ -54,14 +54,14 @@ export default function CV() {
     return (
       <div className="flex-initial md:w-72 h-fit md:sticky top-0 bottom-0 flex flex-col px-4 justify-center bg-lime-200">
         <div className="w-full h-60 px-6 overflow-hidden rounded-full">
-          {/* <Image
+          <Image
             src={defaultCardImage}
             alt="image-alt-text"
             sizes="320 640 750"
             layout="responsive"
             objectFit="cover"
             priority
-          /> */}
+          />
         </div>
         <h3 className="text-2xl py-2 text-center font-secondary font-semibold tracking-wider">
           {obj.name}

@@ -52,7 +52,7 @@ export type PortFolio = {
   lastEducation: string;
   navbar: Navbar;
   location: Location;
-  image: string;
+  image: any;
   skills: Skills[];
   education: Education[];
   headline: PortableTextBlock[];
