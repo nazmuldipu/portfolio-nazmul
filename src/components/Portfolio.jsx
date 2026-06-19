@@ -30,77 +30,13 @@ const SECTIONS = [
   { id: "contact", n: "06", en: "Contact", bn: "যোগাযোগ" },
 ];
 
-// ── Fallbacks ─────────────────────────────────────────────────────────────────
-// Used only when Sanity is unreachable or a field is empty, so the page never
-// renders broken. Live content comes from the `data` prop (getStaticProps).
-const FALLBACK = {
-  name: "Nazmul Alam",
-  city: "Dhaka",
-  eyebrow: "Senior Software Engineer",
-  headline:
-    "I build the booking engines and content systems that hospitality and travel brands run on.",
-  highlight: "booking engines and content systems",
-  intro:
-    "Full-stack engineer — Java and Node on the back end, React, Svelte, and Next.js on the front. I turn fuzzy requirements into fast, reliable platforms.",
-  aboutSubtitle:
-    "Hand me a tangled booking flow or a CMS your team is afraid to touch, and I'll give back something fast, typed, and easy to extend.",
-  eduLine: "MSc · University of Stuttgart",
-  avatarUrl: "/nazmul.jpg",
-};
-
-// Sanity has no `projects` field yet — these stay client-side until one exists
-// (see /portfolio-report).
-const PROJECTS = [
-  {
-    title: "Polyglot LMS",
-    kicker: "Multilingual course delivery",
-    outcome:
-      "Moved every line of course copy into locale-aware Sanity fields, so launching a new language went from a multi-week engineering project to an afternoon of translation.",
-    tech: ["Next.js", "Sanity", "TypeScript", "i18n"],
-    repo: "https://github.com/nazmuldipu",
-  },
-  {
-    title: "Syllabus Studio",
-    kicker: "Structured authoring",
-    outcome:
-      "Built instructors a course → module → lesson editor that matches how they already plan — publishing a new track now ships with zero engineering tickets.",
-    tech: ["React", "Sanity", "Node.js", "PostgreSQL"],
-    repo: "https://github.com/nazmuldipu",
-  },
-  {
-    title: "Cohort Signals",
-    kicker: "Learner analytics",
-    outcome:
-      "Streamed lesson-completion events into one progress view across 12,000 learners, surfacing at-risk students a full week earlier than the old weekly export.",
-    tech: ["Next.js", "Node.js", "MongoDB", "WebSockets"],
-    repo: "https://github.com/nazmuldipu",
-  },
-];
-
-const FALLBACK_SKILL_GROUPS = [
-  { title: "Backend", items: ["Java · Spring Boot", "Node.js", "REST APIs"] },
-  { title: "Frontend", items: ["React", "Next.js", "Svelte", "TypeScript"] },
-  { title: "CMS / Data", items: ["Sanity", "PostgreSQL", "MongoDB", "MySQL"] },
-  { title: "Tooling", items: ["Git", "Docker", "Jest", "Cypress"] },
-];
-
-const FALLBACK_EXPERIENCE = [
-  {
-    role: "Senior Software Engineer",
-    company: "Cefalo",
-    period: "2022 — Present",
-    points: [
-      "Lead technical design and code reviews across the team's web platform.",
-      "Build and maintain full-stack applications end to end.",
-    ],
-  },
-];
-
-const FALLBACK_SOCIALS = [
-  { slug: "email", name: "Email", href: "mailto:nazmuldipu@gmail.com" },
-  { slug: "linkedin", name: "LinkedIn", href: "https://www.linkedin.com/in/nazmuldipu" },
-  { slug: "github", name: "GitHub", href: "https://github.com/nazmuldipu" },
-];
+// Every piece of profile content comes from Sanity (the `data` prop). There are
+// no content fallbacks: if a field is missing, its block renders empty rather
+// than showing stand-in copy, so nothing on the page is ever stale or invented.
+// `SECTIONS` above is the only hard-coded text — it's the site's section nav
+// (information architecture), not profile data. The CV path below is the lone
+// exception: it falls back to the real PDF committed in /public.
+const CV_FALLBACK = "/nazmul_alam_cv.pdf";
 
 // ── Small presentational helpers ──────────────────────────────────────────────
 function Highlight({ children }) {
@@ -212,34 +148,34 @@ function SyllabusRail({ active, name }) {
 export default function Portfolio({ data }) {
   const [active, setActive] = useState("top");
 
-  // Live content from Sanity (getStaticProps), with resilient fallbacks.
+  // All profile content is sourced from Sanity (the `data` prop). Missing
+  // fields resolve to empty, never to invented copy.
   const p = data || {};
-  const name = p.name || FALLBACK.name;
-  const city = p.location?.city || FALLBACK.city;
-  const eyebrow = p.eyebrow || FALLBACK.eyebrow;
-  const headline = p.headline || FALLBACK.headline;
-  const highlight = p.highlight || FALLBACK.highlight;
-  const intro = p.intro || FALLBACK.intro;
-  const aboutSubtitle = p.about?.subtitle || FALLBACK.aboutSubtitle;
-  const eduLine = p.about?.eduLine || FALLBACK.eduLine;
-  const avatarUrl = p.avatarUrl || FALLBACK.avatarUrl;
-  const skillGroups =
-    p.skillGroups && p.skillGroups.length
-      ? p.skillGroups
-      : FALLBACK_SKILL_GROUPS;
-  const experience =
-    p.experience && p.experience.length ? p.experience : FALLBACK_EXPERIENCE;
-  const socials = p.socials && p.socials.length ? p.socials : FALLBACK_SOCIALS;
-  const projects = p.projects && p.projects.length ? p.projects : PROJECTS;
-  const contactHeadline =
-    p.contactHeadline ||
-    "Need a booking platform or CMS that holds up under real traffic?";
-  const initials = name
-    .split(" ")
-    .map((w) => w[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
+  const name = p.name || "";
+  const locationLine = [p.location?.city, p.location?.country]
+    .filter(Boolean)
+    .join(", ");
+  const eyebrow = p.eyebrow || "";
+  const headline = p.headline || "";
+  const highlight = p.highlight || "";
+  const intro = p.intro || "";
+  const aboutSubtitle = p.about?.subtitle || "";
+  const eduLine = p.about?.eduLine || "";
+  const avatarUrl = p.avatarUrl || null;
+  const skillGroups = p.skillGroups || [];
+  const experience = p.experience || [];
+  const socials = p.socials || [];
+  const projects = p.projects || [];
+  const contactHeadline = p.contactHeadline || "";
+  const contactSubtitle = p.contactSubtitle || "";
+  const cvUrl = p.cvUrl || CV_FALLBACK;
+  const initials =
+    name
+      .split(" ")
+      .map((w) => w[0])
+      .join("")
+      .slice(0, 2)
+      .toUpperCase() || "·";
 
   useEffect(() => {
     // Track the active section for the rail.
@@ -288,9 +224,9 @@ export default function Portfolio({ data }) {
           id="top"
           className="flex min-h-screen flex-col justify-center py-20"
         >
-          <p className="reveal font-bengali text-sm text-ink/40">
-            নাজমুল আলম · {city}
-          </p>
+          {locationLine && (
+            <p className="reveal text-sm text-ink/40">{locationLine}</p>
+          )}
           <p className="reveal mt-2 text-xs font-semibold uppercase tracking-[0.22em] text-ink/55">
             {eyebrow}
           </p>
@@ -312,7 +248,7 @@ export default function Portfolio({ data }) {
               View projects <ArrowDown />
             </Button>
             <Button size="lg" variant="outline" asChild>
-              <a href="/nazmul_alam_cv.pdf" target="_blank" rel="noreferrer">
+              <a href={cvUrl} target="_blank" rel="noreferrer">
                 Download CV <Download />
               </a>
             </Button>
@@ -487,10 +423,11 @@ export default function Portfolio({ data }) {
             <h2 className="max-w-xl font-display text-3xl font-bold leading-tight tracking-tight sm:text-4xl">
               {contactHeadline}
             </h2>
-            <p className="mt-4 max-w-lg text-lg text-ink/65">
-              That&apos;s the work I like most. Send a note — I reply to every
-              real one.
-            </p>
+            {contactSubtitle && (
+              <p className="mt-4 max-w-lg text-lg text-ink/65">
+                {contactSubtitle}
+              </p>
+            )}
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               {socials.map((s, i) => {
                 const Icon = socialIcon(s);

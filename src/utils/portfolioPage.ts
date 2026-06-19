@@ -80,6 +80,8 @@ export function mapPortfolio(raw: any, avatarUrl: string | null) {
     highlight: raw.highlightPhrase || about.title || "",
     intro: plain(raw.title),
     contactHeadline: raw.contactHeadline || "",
+    contactSubtitle: plain(raw.contactSubtitle),
+    cvUrl: raw.cvUrl || null,
     about: {
       subtitle: about.subtitle || "",
       eduLine: [degreeShort, academy].filter(Boolean).join(" · "),
