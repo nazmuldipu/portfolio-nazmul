@@ -58,9 +58,13 @@ const parseTech = (s: any): string[] => {
     .filter(Boolean);
 };
 
-export function mapPortfolio(raw: any, avatarUrl: string | null) {
+// `urlFor(source, width, height)` builds a Sanity image URL (or null).
+type UrlFor = (source: any, width: number, height: number) => string | null;
+
+export function mapPortfolio(raw: any, urlFor: UrlFor) {
   if (!raw) return null;
   const about = raw.about || {};
+  const avatarUrl = urlFor(raw.image, 180, 180);
   const edu0 = (raw.education || [])[0] || {};
   const degree = (edu0.degree || "").toString();
   const degreeShort = /master/i.test(degree)
@@ -93,6 +97,7 @@ export function mapPortfolio(raw: any, avatarUrl: string | null) {
         outcome: p.description || "",
         tech: parseTech(p.skills),
         url: p.link || "",
+        image: urlFor(p.image, 800, 450),
       }))
       .filter((p: any) => p.title),
     skillGroups: (raw.skills || [])

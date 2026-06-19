@@ -6,15 +6,14 @@ import { getPortfolioPage } from "@/src/sanity/lib/queries";
 import { mapPortfolio } from "@/src/utils/portfolioPage";
 
 const builder = imageUrlBuilder(client);
+const urlFor = (source: any, width: number, height: number) =>
+  source ? builder.image(source).width(width).height(height).fit("crop").url() : null;
 
 export async function getStaticProps() {
   let data = null;
   try {
     const raw = await getPortfolioPage();
-    const avatarUrl = raw?.image
-      ? builder.image(raw.image).width(180).height(180).fit("crop").url()
-      : null;
-    data = mapPortfolio(raw, avatarUrl);
+    data = mapPortfolio(raw, urlFor);
   } catch (e) {
     // Leave data null — the component renders empty rather than stand-in copy.
     data = null;

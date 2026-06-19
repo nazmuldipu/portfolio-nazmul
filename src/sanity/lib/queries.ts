@@ -9,7 +9,7 @@ export async function getPortfolioPage() {
       "cvUrl": coalesce(cvUrl, resume.asset->url, cv.asset->url),
       experience,
       "skills": skills[]{ level, "items": technologies[].name },
-      "projects": projects[]{ projectName, description, skills, link, start, end },
+      "projects": projects[]{ projectName, description, skills, link, start, end, image },
       "socials": navbar.socials[]{ name, href, "slug": slug.current }
     }`
   );

@@ -67,11 +67,46 @@
   transform: none;
 }
 
+/* Hero atmosphere: two soft, palette-tinted glows that drift slowly behind the
+   thesis. Kept low-opacity and blurred so the marker accent stays the loud one. */
+.portfolio-root .hero-glow {
+  position: absolute;
+  inset: 0 -8% 0 -8%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      46% 46% at 18% 42%,
+      rgb(var(--indigo) / 0.24),
+      transparent 70%
+    ),
+    radial-gradient(
+      42% 46% at 78% 56%,
+      rgb(var(--marker) / 0.3),
+      transparent 70%
+    );
+  filter: blur(60px);
+  opacity: 0.75;
+  animation: hero-drift 22s ease-in-out infinite alternate;
+}
+
+@keyframes hero-drift {
+  from {
+    transform: translate3d(-2%, -1%, 0) scale(1);
+  }
+  to {
+    transform: translate3d(3%, 2%, 0) scale(1.08);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .portfolio-root .reveal {
     opacity: 1;
     transform: none;
     transition: none;
+  }
+  .portfolio-root .hero-glow {
+    animation: none;
   }
 }
 

@@ -16,6 +16,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/src/components/ui/avatar";
+import { AspectRatio } from "@/src/components/ui/aspect-ratio";
 
 // ── Content ─────────────────────────────────────────────────────────────────
 // The syllabus rail is the signature element: a numbered spine that doubles as
@@ -222,8 +223,10 @@ export default function Portfolio({ data }) {
         {/* 01 — HERO / THESIS */}
         <section
           id="top"
-          className="flex min-h-screen flex-col justify-center py-20"
+          className="relative isolate flex min-h-screen flex-col justify-center overflow-hidden py-20"
         >
+          {/* subtle generated glow — low-intensity atmosphere behind the thesis */}
+          <div aria-hidden className="hero-glow" />
           {locationLine && (
             <p className="reveal text-sm text-ink/40">{locationLine}</p>
           )}
@@ -239,13 +242,15 @@ export default function Portfolio({ data }) {
           <div className="reveal mt-9 flex flex-col gap-3 sm:flex-row">
             <Button
               size="lg"
+              className="group"
               onClick={() =>
                 document
                   .getElementById("work")
                   ?.scrollIntoView({ behavior: "smooth" })
               }
             >
-              View projects <ArrowDown />
+              View projects{" "}
+              <ArrowDown className="transition-transform duration-200 group-hover:translate-y-0.5" />
             </Button>
             <Button size="lg" variant="outline" asChild>
               <a href={cvUrl} target="_blank" rel="noreferrer">
@@ -315,8 +320,20 @@ export default function Portfolio({ data }) {
               return (
               <Card
                 key={`${proj.title}-${i}`}
-                className="reveal transition-shadow hover:shadow-[var(--lift)]"
+                className="reveal group overflow-hidden transition-shadow hover:shadow-[var(--lift)]"
               >
+                {proj.image && (
+                  <div className="overflow-hidden border-b border-rule bg-ink/5">
+                    <AspectRatio ratio={16 / 9}>
+                      <img
+                        src={proj.image}
+                        alt={proj.title}
+                        loading="lazy"
+                        className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
+                      />
+                    </AspectRatio>
+                  </div>
+                )}
                 <CardHeader className="pb-4">
                   <div className="flex items-start justify-between gap-4">
                     <div>
