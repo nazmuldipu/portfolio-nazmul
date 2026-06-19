@@ -65,6 +65,7 @@ export function mapPortfolio(raw: any, urlFor: UrlFor) {
   if (!raw) return null;
   const about = raw.about || {};
   const avatarUrl = urlFor(raw.image, 180, 180);
+  const portraitUrl = urlFor(raw.image, 700, 875); // 4:5 portrait for the About section
   const edu0 = (raw.education || [])[0] || {};
   const degree = (edu0.degree || "").toString();
   const degreeShort = /master/i.test(degree)
@@ -78,6 +79,7 @@ export function mapPortfolio(raw: any, urlFor: UrlFor) {
     name: raw.name || "Nazmul Alam",
     location: raw.location || null,
     avatarUrl,
+    portraitUrl,
     eyebrow: raw.currentPosition || about.title || "Senior Software Engineer",
     // Prefer the purpose-built short tagline for the hero; fall back to headline.
     headline: plain(raw.tagline) || firstSentence(plain(raw.headline)),

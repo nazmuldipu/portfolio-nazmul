@@ -11,11 +11,6 @@ import {
   CardHeader,
 } from "@/src/components/ui/card";
 import { Separator } from "@/src/components/ui/separator";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/src/components/ui/avatar";
 import { AspectRatio } from "@/src/components/ui/aspect-ratio";
 
 // ── Content ─────────────────────────────────────────────────────────────────
@@ -25,9 +20,9 @@ import { AspectRatio } from "@/src/components/ui/aspect-ratio";
 const SECTIONS = [
   { id: "top", n: "01", en: "Thesis", bn: "ভূমিকা" },
   { id: "about", n: "02", en: "About", bn: "পরিচিতি" },
-  { id: "skills", n: "03", en: "Stack", bn: "দক্ষতা" },
-  { id: "work", n: "04", en: "Work", bn: "কাজ" },
-  { id: "experience", n: "05", en: "Path", bn: "পথ" },
+  { id: "experience", n: "03", en: "Path", bn: "পথ" },
+  { id: "skills", n: "04", en: "Stack", bn: "দক্ষতা" },
+  { id: "work", n: "05", en: "Work", bn: "কাজ" },
   { id: "contact", n: "06", en: "Contact", bn: "যোগাযোগ" },
 ];
 
@@ -163,8 +158,18 @@ export default function Portfolio({ data }) {
   const aboutSubtitle = p.about?.subtitle || "";
   const eduLine = p.about?.eduLine || "";
   const avatarUrl = p.avatarUrl || null;
+  const portraitUrl = p.portraitUrl || avatarUrl;
   const skillGroups = p.skillGroups || [];
   const experience = p.experience || [];
+  const currentCompany = (experience[0]?.company || "").split(",")[0].trim();
+  const aboutFacts = [
+    eyebrow && {
+      label: "Currently",
+      value: currentCompany ? `${eyebrow} at ${currentCompany}` : eyebrow,
+    },
+    locationLine && { label: "Based in", value: locationLine },
+    eduLine && { label: "Education", value: eduLine },
+  ].filter(Boolean);
   const socials = p.socials || [];
   const projects = p.projects || [];
   const contactHeadline = p.contactHeadline || "";
@@ -264,30 +269,120 @@ export default function Portfolio({ data }) {
 
         {/* 02 — ABOUT */}
         <section id="about" className="py-20 md:py-28">
-          <div className="reveal">
-            <SectionLabel n="02" en="About" />
-            <div className="flex items-center gap-4">
-              <Avatar className="h-14 w-14 ring-1 ring-rule">
-                <AvatarImage src={avatarUrl} alt={name} />
-                <AvatarFallback>{initials}</AvatarFallback>
-              </Avatar>
-              <div className="text-sm text-ink/55">
-                <div className="font-medium text-ink">{name}</div>
-                <div>{eduLine}</div>
+          <SectionLabel n="02" en="About" />
+          <div className="grid gap-9 md:grid-cols-[220px_1fr] md:gap-12">
+            {/* framed portrait — the section's focal point */}
+            <div className="reveal">
+              <div className="relative isolate w-full max-w-[260px] md:max-w-none">
+                <div
+                  aria-hidden
+                  className="absolute inset-0 translate-x-3 translate-y-3 rounded-2xl bg-indigo/10"
+                />
+                <div className="relative overflow-hidden rounded-2xl bg-ink/5 shadow-[var(--lift)] ring-1 ring-rule">
+                  <AspectRatio ratio={4 / 5}>
+                    {portraitUrl ? (
+                      <img
+                        src={portraitUrl}
+                        alt={name}
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center font-display text-4xl text-ink/40">
+                        {initials}
+                      </div>
+                    )}
+                  </AspectRatio>
+                </div>
+              </div>
+              <div className="mt-5">
+                <div className="font-display text-lg font-semibold">{name}</div>
+                {locationLine && (
+                  <div className="text-sm text-ink/55">{locationLine}</div>
+                )}
               </div>
             </div>
-            <p className="mt-7 text-xl leading-relaxed text-ink/80">
-              {aboutSubtitle}
-            </p>
+
+            {/* narrative + structured facts */}
+            <div className="reveal">
+              <p className="text-xl leading-relaxed text-ink/80 md:text-2xl md:leading-relaxed">
+                {aboutSubtitle}
+              </p>
+              {aboutFacts.length > 0 && (
+                <dl className="mt-9 flex flex-col gap-4 border-t border-rule pt-7">
+                  {aboutFacts.map((f) => (
+                    <div key={f.label} className="flex flex-col gap-1 sm:flex-row sm:gap-6">
+                      <dt className="w-28 shrink-0 pt-0.5 text-xs font-semibold uppercase tracking-[0.16em] text-indigo">
+                        {f.label}
+                      </dt>
+                      <dd className="text-sm leading-relaxed text-ink/80">
+                        {f.value}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              )}
+            </div>
           </div>
         </section>
 
         <Separator />
 
-        {/* 03 — SKILLS */}
+        {/* 03 — PATH */}
+        <section id="experience" className="py-20 md:py-28">
+          <div className="reveal">
+            <SectionLabel n="03" en="Path" />
+          </div>
+          <ol className="flex flex-col">
+            {experience.map((job, i) => (
+              <li
+                key={`${job.company}-${i}`}
+                className="reveal grid grid-cols-[auto_1fr] gap-x-5"
+              >
+                {/* timeline gutter */}
+                <div className="flex flex-col items-center">
+                  <span className="mt-1.5 h-2.5 w-2.5 rounded-full border-2 border-indigo bg-paper" />
+                  {i < experience.length - 1 && (
+                    <span className="my-1 w-px flex-1 bg-rule" />
+                  )}
+                </div>
+                <div className="pb-10">
+                  <div className="flex flex-wrap items-baseline justify-between gap-x-4">
+                    <h3 className="font-display text-lg font-semibold">
+                      {job.role}
+                    </h3>
+                    <span className="text-xs font-medium tabular-nums text-ink/45">
+                      {job.period}
+                    </span>
+                  </div>
+                  <div className="text-sm font-medium text-indigo">
+                    {job.company}
+                  </div>
+                  <ul className="mt-3 flex flex-col gap-2">
+                    {(job.points || []).map((pt, j) => (
+                      <li
+                        key={j}
+                        className="flex gap-2.5 text-sm leading-relaxed text-ink/70"
+                      >
+                        <span
+                          aria-hidden
+                          className="mt-2 h-1 w-1 shrink-0 rounded-full bg-ink/30"
+                        />
+                        {pt}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <Separator />
+
+        {/* 04 — STACK */}
         <section id="skills" className="py-20 md:py-28">
           <div className="reveal">
-            <SectionLabel n="03" en="Stack" />
+            <SectionLabel n="04" en="Stack" />
             <div className="grid grid-cols-1 gap-x-10 gap-y-10 sm:grid-cols-2">
               {skillGroups.map((group) => (
                 <div key={group.title}>
@@ -308,10 +403,10 @@ export default function Portfolio({ data }) {
 
         <Separator />
 
-        {/* 04 — WORK */}
+        {/* 05 — WORK */}
         <section id="work" className="py-20 md:py-28">
           <div className="reveal">
-            <SectionLabel n="04" en="Work" />
+            <SectionLabel n="05" en="Work" />
           </div>
           <div className="flex flex-col gap-5">
             {projects.map((proj, i) => {
@@ -377,58 +472,6 @@ export default function Portfolio({ data }) {
               );
             })}
           </div>
-        </section>
-
-        <Separator />
-
-        {/* 05 — EXPERIENCE */}
-        <section id="experience" className="py-20 md:py-28">
-          <div className="reveal">
-            <SectionLabel n="05" en="Path" />
-          </div>
-          <ol className="flex flex-col">
-            {experience.map((job, i) => (
-              <li
-                key={`${job.company}-${i}`}
-                className="reveal grid grid-cols-[auto_1fr] gap-x-5"
-              >
-                {/* timeline gutter */}
-                <div className="flex flex-col items-center">
-                  <span className="mt-1.5 h-2.5 w-2.5 rounded-full border-2 border-indigo bg-paper" />
-                  {i < experience.length - 1 && (
-                    <span className="my-1 w-px flex-1 bg-rule" />
-                  )}
-                </div>
-                <div className="pb-10">
-                  <div className="flex flex-wrap items-baseline justify-between gap-x-4">
-                    <h3 className="font-display text-lg font-semibold">
-                      {job.role}
-                    </h3>
-                    <span className="text-xs font-medium tabular-nums text-ink/45">
-                      {job.period}
-                    </span>
-                  </div>
-                  <div className="text-sm font-medium text-indigo">
-                    {job.company}
-                  </div>
-                  <ul className="mt-3 flex flex-col gap-2">
-                    {(job.points || []).map((pt, j) => (
-                      <li
-                        key={j}
-                        className="flex gap-2.5 text-sm leading-relaxed text-ink/70"
-                      >
-                        <span
-                          aria-hidden
-                          className="mt-2 h-1 w-1 shrink-0 rounded-full bg-ink/30"
-                        />
-                        {pt}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </li>
-            ))}
-          </ol>
         </section>
 
         <Separator />
