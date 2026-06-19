@@ -248,8 +248,8 @@ export default function PortfolioReport({ live }: { live: any }) {
           <footer className="text-xs text-ink/40">
             Generated against dataset{" "}
             <code className="font-mono">production</code>. Open{" "}
-            <a className="text-indigo hover:underline" href="/portfolio">
-              /portfolio
+            <a className="text-indigo hover:underline" href="/">
+              the home page
             </a>{" "}
             to see the live result.
           </footer>

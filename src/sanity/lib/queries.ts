@@ -12,7 +12,7 @@ export async function getProfile() {
   return posts;
 }
 
-// Focused query for the /portfolio page: includes resolved social links.
+// Focused query for the portfolio home page: includes resolved social links.
 export async function getPortfolioPage() {
   return client.fetch(
     `*[_type == "portfolio"][0]{

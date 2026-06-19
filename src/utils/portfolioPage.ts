@@ -1,5 +1,5 @@
 // Maps the raw Sanity `portfolio` document into the plain, serializable shape
-// the /portfolio component consumes. Runs server-side (getStaticProps), so the
+// the Portfolio component (home route) consumes. Runs server-side (getStaticProps), so the
 // component stays free of Sanity / PortableText dependencies.
 
 type Block = { children?: { text?: string }[]; listItem?: string };
