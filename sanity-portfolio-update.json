@@ -1,0 +1,306 @@
+{
+  "_about": "Content-quality update for the Sanity `portfolio` document (one singleton, _id: \"portfolio\") in project u3z7hv6o, dataset `production`. The `mutations` array holds standard Sanity mutations: a single patch that SETs the improved values and UNSETs the public home address. Patches target fields by key path, so technology logos, company logos, education, navbar, location and the avatar image are left completely untouched.",
+  "_howToApply": {
+    "1_requires": "A write token with Editor permission. Create one at sanity.io → Project → API → Tokens, then export it: `export SANITY_WRITE_TOKEN=sk...`",
+    "2_apply": "From the project root run the snippet in `_applyScript` (Node). It commits every mutation in one transaction.",
+    "3_alternative": "Or paste each patch's `set`/`unset` into the Vision plugin / `sanity exec`, or edit the fields by hand in Studio using the values below.",
+    "_applyScript": "const {createClient}=require('@sanity/client');const file=require('./sanity-portfolio-update.json');const c=createClient({projectId:'u3z7hv6o',dataset:'production',apiVersion:'2024-01-07',token:process.env.SANITY_WRITE_TOKEN,useCdn:false});let tx=c.transaction();for(const m of file.mutations){if(m.patch){const{id,...ops}=m.patch;tx=tx.patch(id,ops);}}tx.commit({visibility:'async'}).then(r=>console.log('applied',r.transactionId)).catch(e=>{console.error(e.message);process.exit(1);});"
+  },
+  "_appliesWithoutSchemaChange": [
+    "headline — tightened to one line (was a 2-sentence, ~240-char paragraph).",
+    "title — refined intro; tenure reconciled to 8+ years (was 'over 6 years').",
+    "about.subtitle — rewritten: current, specific, reader-focused (was generic 'freelancer… looking for a new opportunity').",
+    "about.details — removed the full home street address (privacy); fixed the 'email-dark' slug to 'email'; trimmed the phone number.",
+    "skills[].level 'Tools / Utilites' → 'Tools / Utilities' (typo).",
+    "skills Testing technology 'Playwrite' → 'Playwright' (typo).",
+    "experience[].roles — rewritten as concise impact bullets; dropped the generic 'primary responsibilities…' opener and the stray-glyph filler bullet ('Perform other duties as assigned.Ï').",
+    "experience[].company — normalised casing and city ('UNOLO… dhaka' → 'Unolo Technology Limited, Dhaka'; 'CEFALO' → 'Cefalo').",
+    "experience[].starts — trimmed trailing whitespace."
+  ],
+  "_requiresSchemaAddition_seeProposedBelow": [
+    "There is still no `projects` field — the portfolio Work section can't be CMS-driven until one is added (placeholder content omitted here on purpose; supply your real projects).",
+    "Optional: a short `tagline` + `highlightPhrase`, and a `contactHeadline`, to move the hero one-liner and contact CTA into the CMS."
+  ],
+  "documentId": "portfolio",
+  "mutations": [
+    {
+      "patch": {
+        "id": "portfolio",
+        "set": {
+          "headline": [
+            {
+              "_key": "hl1",
+              "_type": "block",
+              "style": "normal",
+              "markDefs": [],
+              "children": [
+                {
+                  "_key": "hl1s",
+                  "_type": "span",
+                  "marks": [],
+                  "text": "Senior Software Engineer building reliable full-stack web apps with React, Svelte, Node, and Java."
+                }
+              ]
+            }
+          ],
+          "title": [
+            {
+              "_key": "ttl1",
+              "_type": "block",
+              "style": "normal",
+              "markDefs": [],
+              "children": [
+                {
+                  "_key": "ttl1s",
+                  "_type": "span",
+                  "marks": [],
+                  "text": "I've spent 8+ years turning fuzzy product requirements into fast, well-tested web applications — owning both the Java and Node back end and the React, Svelte, and Angular front end. I lead design and code reviews and care about software that stays maintainable as it grows."
+                }
+              ]
+            }
+          ],
+          "about.subtitle": "Hand me a feature your team is wary of or a codebase that's hard to change, and I'll give back something fast, typed, and easy to extend. I work across the stack — Java and Node services behind React, Svelte, and Angular front ends — and I lead design and code reviews so quality holds as the product grows.",
+          "about.details[_key==\"e22df9275794\"].slug.current": "email",
+          "about.details[_key==\"5c4c157c1084\"].value": "+8801912239643",
+          "skills[_key==\"3fe858bfdef9\"].level": "Tools / Utilities",
+          "skills[_key==\"4225b688825d\"].technologies[_key==\"8be438b632c8\"].name": "Playwright",
+          "experience[_key==\"fdac383c58ca\"].company": "Cefalo, Dhaka",
+          "experience[_key==\"c194e94766f0\"].company": "Unolo Technology Limited, Dhaka",
+          "experience[_key==\"5ca2150a719b\"].company": "Monerbari Technology Limited, Dhaka",
+          "experience[_key==\"87f1e90f2a09\"].starts": "June 2021",
+          "experience[_key==\"5ca2150a719b\"].starts": "February 2017",
+          "experience[_key==\"fdac383c58ca\"].roles": [
+            {
+              "_key": "rc1",
+              "_type": "block",
+              "style": "normal",
+              "listItem": "bullet",
+              "level": 1,
+              "markDefs": [],
+              "children": [
+                {
+                  "_key": "rc1s",
+                  "_type": "span",
+                  "marks": [],
+                  "text": "Lead technical design and code reviews across the team's web platform, signing off on feature delivery."
+                }
+              ]
+            },
+            {
+              "_key": "rc2",
+              "_type": "block",
+              "style": "normal",
+              "listItem": "bullet",
+              "level": 1,
+              "markDefs": [],
+              "children": [
+                {
+                  "_key": "rc2s",
+                  "_type": "span",
+                  "marks": [],
+                  "text": "Build and support full-stack features end to end — APIs, database integration, and new functionality."
+                }
+              ]
+            },
+            {
+              "_key": "rc3",
+              "_type": "block",
+              "style": "normal",
+              "listItem": "bullet",
+              "level": 1,
+              "markDefs": [],
+              "children": [
+                {
+                  "_key": "rc3s",
+                  "_type": "span",
+                  "marks": [],
+                  "text": "Translate complex business and functional requirements into technical specifications the team builds against."
+                }
+              ]
+            }
+          ],
+          "experience[_key==\"87f1e90f2a09\"].roles": [
+            {
+              "_key": "rr1",
+              "_type": "block",
+              "style": "normal",
+              "listItem": "bullet",
+              "level": 1,
+              "markDefs": [],
+              "children": [
+                {
+                  "_key": "rr1s",
+                  "_type": "span",
+                  "marks": [],
+                  "text": "Built modern client-side web applications and shipped reusable UI consumed across multiple client sites."
+                }
+              ]
+            },
+            {
+              "_key": "rr2",
+              "_type": "block",
+              "style": "normal",
+              "listItem": "bullet",
+              "level": 1,
+              "markDefs": [],
+              "children": [
+                {
+                  "_key": "rr2s",
+                  "_type": "span",
+                  "marks": [],
+                  "text": "Drove design discussions and mentored developers on front-end architecture and best practices."
+                }
+              ]
+            },
+            {
+              "_key": "rr3",
+              "_type": "block",
+              "style": "normal",
+              "listItem": "bullet",
+              "level": 1,
+              "markDefs": [],
+              "children": [
+                {
+                  "_key": "rr3s",
+                  "_type": "span",
+                  "marks": [],
+                  "text": "Iterated quickly in an agile workflow against customer and internal feedback."
+                }
+              ]
+            }
+          ],
+          "experience[_key==\"c194e94766f0\"].roles": [
+            {
+              "_key": "ru1",
+              "_type": "block",
+              "style": "normal",
+              "listItem": "bullet",
+              "level": 1,
+              "markDefs": [],
+              "children": [
+                {
+                  "_key": "ru1s",
+                  "_type": "span",
+                  "marks": [],
+                  "text": "Designed and maintained reusable Java back-end and Angular front-end for a booking platform with an integrated payment gateway."
+                }
+              ]
+            },
+            {
+              "_key": "ru2",
+              "_type": "block",
+              "style": "normal",
+              "listItem": "bullet",
+              "level": 1,
+              "markDefs": [],
+              "children": [
+                {
+                  "_key": "ru2s",
+                  "_type": "span",
+                  "marks": [],
+                  "text": "Wrote 200+ test procedures and translated 30+ user requirements into technical designs."
+                }
+              ]
+            },
+            {
+              "_key": "ru3",
+              "_type": "block",
+              "style": "normal",
+              "listItem": "bullet",
+              "level": 1,
+              "markDefs": [],
+              "children": [
+                {
+                  "_key": "ru3s",
+                  "_type": "span",
+                  "marks": [],
+                  "text": "Hardened delivery with common security practices and established design patterns."
+                }
+              ]
+            }
+          ],
+          "experience[_key==\"5ca2150a719b\"].roles": [
+            {
+              "_key": "rm1",
+              "_type": "block",
+              "style": "normal",
+              "listItem": "bullet",
+              "level": 1,
+              "markDefs": [],
+              "children": [
+                {
+                  "_key": "rm1s",
+                  "_type": "span",
+                  "marks": [],
+                  "text": "Built and shipped feature requirements across an Angular + REST API stack, owning back-end testing and debugging."
+                }
+              ]
+            }
+          ],
+          "experience[_key==\"b832eafb4fb5\"].roles": [
+            {
+              "_key": "rl1",
+              "_type": "block",
+              "style": "normal",
+              "listItem": "bullet",
+              "level": 1,
+              "markDefs": [],
+              "children": [
+                {
+                  "_key": "rl1s",
+                  "_type": "span",
+                  "marks": [],
+                  "text": "Taught structured programming — theory and lab — to undergraduate engineers."
+                }
+              ]
+            },
+            {
+              "_key": "rl2",
+              "_type": "block",
+              "style": "normal",
+              "listItem": "bullet",
+              "level": 1,
+              "markDefs": [],
+              "children": [
+                {
+                  "_key": "rl2s",
+                  "_type": "span",
+                  "marks": [],
+                  "text": "Built the habit of explaining systems clearly that still shapes how I review code today."
+                }
+              ]
+            }
+          ]
+        },
+        "unset": ["about.details[_key==\"011702bae487\"]"]
+      }
+    }
+  ],
+  "proposedSchemaAdditions": {
+    "_note": "These need new fields in your Sanity schema before they can be stored/edited in Studio. Values below are ready to use once the fields exist.",
+    "projects": {
+      "_fieldType": "array of objects { title (string), kicker (string), outcome (text), tech (array of string), repo (url), image (image) }",
+      "example": [
+        {
+          "title": "Your real project",
+          "kicker": "One-line category",
+          "outcome": "What changed and by how much — a single outcome sentence, not a description.",
+          "tech": ["React", "Node.js", "PostgreSQL"],
+          "repo": "https://github.com/nazmuldipu/your-repo"
+        }
+      ]
+    },
+    "tagline": {
+      "_fieldType": "string (≤ ~90 chars) — short hero line",
+      "value": "Senior Software Engineer shipping full-stack web apps that stay maintainable as they grow."
+    },
+    "highlightPhrase": {
+      "_fieldType": "string — the exact substring of the headline/tagline to highlight",
+      "value": "Senior Software Engineer"
+    },
+    "contactHeadline": {
+      "_fieldType": "string — contact section CTA (currently hard-coded in the page)",
+      "value": "Have a web app or platform that needs to be fast and reliable?"
+    }
+  }
+}

@@ -30,25 +30,26 @@ const SECTIONS = [
   { id: "contact", n: "06", en: "Contact", bn: "যোগাযোগ" },
 ];
 
-const SKILL_GROUPS = [
-  {
-    title: "Backend",
-    items: ["Java · Spring Boot", "Node.js", "REST APIs", "Spring Data JPA"],
-  },
-  {
-    title: "Frontend",
-    items: ["React", "Next.js", "Svelte", "TypeScript", "Tailwind CSS"],
-  },
-  {
-    title: "CMS / Data",
-    items: ["Sanity", "Localization (i18n)", "PostgreSQL", "MongoDB", "MySQL"],
-  },
-  {
-    title: "Tooling",
-    items: ["Git", "Docker", "Jest", "Cypress", "Storybook"],
-  },
-];
+// ── Fallbacks ─────────────────────────────────────────────────────────────────
+// Used only when Sanity is unreachable or a field is empty, so the page never
+// renders broken. Live content comes from the `data` prop (getStaticProps).
+const FALLBACK = {
+  name: "Nazmul Alam",
+  city: "Dhaka",
+  eyebrow: "Senior Software Engineer",
+  headline:
+    "I build the booking engines and content systems that hospitality and travel brands run on.",
+  highlight: "booking engines and content systems",
+  intro:
+    "Full-stack engineer — Java and Node on the back end, React, Svelte, and Next.js on the front. I turn fuzzy requirements into fast, reliable platforms.",
+  aboutSubtitle:
+    "Hand me a tangled booking flow or a CMS your team is afraid to touch, and I'll give back something fast, typed, and easy to extend.",
+  eduLine: "MSc · University of Stuttgart",
+  avatarUrl: "/nazmul.jpg",
+};
 
+// Sanity has no `projects` field yet — these stay client-side until one exists
+// (see /portfolio-report).
 const PROJECTS = [
   {
     title: "Polyglot LMS",
@@ -76,43 +77,29 @@ const PROJECTS = [
   },
 ];
 
-const EXPERIENCE = [
+const FALLBACK_SKILL_GROUPS = [
+  { title: "Backend", items: ["Java · Spring Boot", "Node.js", "REST APIs"] },
+  { title: "Frontend", items: ["React", "Next.js", "Svelte", "TypeScript"] },
+  { title: "CMS / Data", items: ["Sanity", "PostgreSQL", "MongoDB", "MySQL"] },
+  { title: "Tooling", items: ["Git", "Docker", "Jest", "Cypress"] },
+];
+
+const FALLBACK_EXPERIENCE = [
   {
     role: "Senior Software Engineer",
     company: "Cefalo",
     period: "2022 — Present",
     points: [
-      "Lead technical design and code reviews across the team's web platform, signing off on feature work end to end.",
-      "Build and maintain full-stack applications — database integration, APIs, and front-end functionality alike.",
+      "Lead technical design and code reviews across the team's web platform.",
+      "Build and maintain full-stack applications end to end.",
     ],
   },
-  {
-    role: "Senior Frontend Developer",
-    company: "ReformedTech",
-    period: "2021 — 2022",
-    points: [
-      "Shipped a reusable CMS and an embeddable booking widget consumed across many client sites.",
-      "Drove design discussions and mentored developers on front-end architecture and best practice.",
-    ],
-  },
-  {
-    role: "Software Developer",
-    company: "Unolo Technology",
-    period: "2019 — 2021",
-    points: [
-      "Designed reusable Java and Angular code for a booking platform with an integrated payment gateway.",
-      "Wrote 200+ test procedures and translated 30+ user requirements into technical designs.",
-    ],
-  },
-  {
-    role: "Lecturer (Part-time)",
-    company: "United International University",
-    period: "2014 — 2017",
-    points: [
-      "Taught structured programming — theory and lab — to undergraduate engineers.",
-      "Built the habit of explaining systems clearly that still shapes how I review code today.",
-    ],
-  },
+];
+
+const FALLBACK_SOCIALS = [
+  { slug: "email", name: "Email", href: "mailto:nazmuldipu@gmail.com" },
+  { slug: "linkedin", name: "LinkedIn", href: "https://www.linkedin.com/in/nazmuldipu" },
+  { slug: "github", name: "GitHub", href: "https://github.com/nazmuldipu" },
 ];
 
 // ── Small presentational helpers ──────────────────────────────────────────────
@@ -124,8 +111,19 @@ function Highlight({ children }) {
   );
 }
 
-// Bilingual labelling lives in the syllabus rail (and the hero); kept out of
-// the section eyebrows so the multilingual nod stays a signal, not wallpaper.
+// Highlights the first occurrence of `keyword` inside `text` (CMS-driven accent).
+function Headline({ text, keyword }) {
+  const i = keyword ? text.indexOf(keyword) : -1;
+  if (i === -1) return <>{text}</>;
+  return (
+    <>
+      {text.slice(0, i)}
+      <Highlight>{keyword}</Highlight>
+      {text.slice(i + keyword.length)}
+    </>
+  );
+}
+
 function SectionLabel({ n, en }) {
   return (
     <div className="mb-8 flex items-baseline gap-3">
@@ -139,8 +137,15 @@ function SectionLabel({ n, en }) {
   );
 }
 
+function socialIcon(s) {
+  const slug = (s.slug || s.name || "").toLowerCase();
+  if (slug.includes("git")) return Github;
+  if (slug.includes("link")) return Linkedin;
+  return Mail;
+}
+
 // ── The signature element: persistent syllabus rail ──────────────────────────
-function SyllabusRail({ active }) {
+function SyllabusRail({ active, name }) {
   const index = Math.max(
     0,
     SECTIONS.findIndex((s) => s.id === active)
@@ -158,7 +163,7 @@ function SyllabusRail({ active }) {
       className="fixed left-0 top-0 z-20 hidden h-screen w-56 flex-col justify-center px-8 lg:flex"
     >
       <div className="mb-10 font-display text-base font-bold tracking-tight">
-        Nazmul Alam
+        {name}
       </div>
       <div className="relative flex flex-col gap-5 pl-5">
         {/* spine + marker-yellow progress fill */}
@@ -204,8 +209,37 @@ function SyllabusRail({ active }) {
 }
 
 // ── Page ──────────────────────────────────────────────────────────────────────
-export default function Portfolio() {
+export default function Portfolio({ data }) {
   const [active, setActive] = useState("top");
+
+  // Live content from Sanity (getStaticProps), with resilient fallbacks.
+  const p = data || {};
+  const name = p.name || FALLBACK.name;
+  const city = p.location?.city || FALLBACK.city;
+  const eyebrow = p.eyebrow || FALLBACK.eyebrow;
+  const headline = p.headline || FALLBACK.headline;
+  const highlight = p.highlight || FALLBACK.highlight;
+  const intro = p.intro || FALLBACK.intro;
+  const aboutSubtitle = p.about?.subtitle || FALLBACK.aboutSubtitle;
+  const eduLine = p.about?.eduLine || FALLBACK.eduLine;
+  const avatarUrl = p.avatarUrl || FALLBACK.avatarUrl;
+  const skillGroups =
+    p.skillGroups && p.skillGroups.length
+      ? p.skillGroups
+      : FALLBACK_SKILL_GROUPS;
+  const experience =
+    p.experience && p.experience.length ? p.experience : FALLBACK_EXPERIENCE;
+  const socials = p.socials && p.socials.length ? p.socials : FALLBACK_SOCIALS;
+  const projects = p.projects && p.projects.length ? p.projects : PROJECTS;
+  const contactHeadline =
+    p.contactHeadline ||
+    "Need a booking platform or CMS that holds up under real traffic?";
+  const initials = name
+    .split(" ")
+    .map((w) => w[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
 
   useEffect(() => {
     // Track the active section for the rail.
@@ -246,7 +280,7 @@ export default function Portfolio() {
 
   return (
     <div className="portfolio-root min-h-screen">
-      <SyllabusRail active={active} />
+      <SyllabusRail active={active} name={name} />
 
       <main className="mx-auto max-w-3xl px-6 sm:px-8 lg:ml-56 lg:max-w-3xl lg:px-16 xl:ml-72">
         {/* 01 — HERO / THESIS */}
@@ -255,21 +289,16 @@ export default function Portfolio() {
           className="flex min-h-screen flex-col justify-center py-20"
         >
           <p className="reveal font-bengali text-sm text-ink/40">
-            নাজমুল আলম · Dhaka
+            নাজমুল আলম · {city}
           </p>
           <p className="reveal mt-2 text-xs font-semibold uppercase tracking-[0.22em] text-ink/55">
-            Full-stack engineer · Booking platforms &amp; content systems
+            {eyebrow}
           </p>
           <h1 className="reveal mt-6 font-display text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl md:text-6xl">
-            I build the{" "}
-            <Highlight>booking engines and content systems</Highlight> that
-            hospitality and travel brands run on.
+            <Headline text={headline} keyword={highlight} />
           </h1>
           <p className="reveal mt-7 max-w-xl text-lg leading-relaxed text-ink/70">
-            Full-stack engineer — Java and Node on the back end, React, Svelte,
-            and Next.js on the front. I turn fuzzy requirements into fast,
-            reliable platforms: booking widgets, hotel CMSs, multi-role
-            ticketing, and the payment flows behind them.
+            {intro}
           </p>
           <div className="reveal mt-9 flex flex-col gap-3 sm:flex-row">
             <Button
@@ -298,23 +327,16 @@ export default function Portfolio() {
             <SectionLabel n="02" en="About" />
             <div className="flex items-center gap-4">
               <Avatar className="h-14 w-14 ring-1 ring-rule">
-                <AvatarImage src="/nazmul.jpg" alt="Nazmul Alam" />
-                <AvatarFallback>NA</AvatarFallback>
+                <AvatarImage src={avatarUrl} alt={name} />
+                <AvatarFallback>{initials}</AvatarFallback>
               </Avatar>
               <div className="text-sm text-ink/55">
-                <div className="font-medium text-ink">Nazmul Alam</div>
-                <div>MSc, University of Stuttgart · 8+ years shipping</div>
+                <div className="font-medium text-ink">{name}</div>
+                <div>{eduLine}</div>
               </div>
             </div>
             <p className="mt-7 text-xl leading-relaxed text-ink/80">
-              Hand me a tangled booking flow or a CMS your team is afraid to
-              touch, and I&apos;ll give back something fast, typed, and easy to
-              extend. Over eight years I&apos;ve shipped hotel booking widgets,
-              multi-role ticketing platforms, and content systems for clients
-              across the US and Bangladesh — owning both the Java/Node back end
-              and the React/Svelte front end. I lead design and code reviews
-              now, and I taught programming as a university lecturer, so I
-              document and mentor as I build.
+              {aboutSubtitle}
             </p>
           </div>
         </section>
@@ -326,7 +348,7 @@ export default function Portfolio() {
           <div className="reveal">
             <SectionLabel n="03" en="Stack" />
             <div className="grid grid-cols-1 gap-x-10 gap-y-10 sm:grid-cols-2">
-              {SKILL_GROUPS.map((group) => (
+              {skillGroups.map((group) => (
                 <div key={group.title}>
                   <h3 className="font-display text-sm font-semibold text-ink">
                     {group.title}
@@ -351,38 +373,47 @@ export default function Portfolio() {
             <SectionLabel n="04" en="Work" />
           </div>
           <div className="flex flex-col gap-5">
-            {PROJECTS.map((p) => (
+            {projects.map((proj, i) => {
+              const href = proj.url || proj.repo;
+              const LinkIcon = proj.repo ? Github : ArrowUpRight;
+              return (
               <Card
-                key={p.title}
+                key={`${proj.title}-${i}`}
                 className="reveal transition-shadow hover:shadow-[var(--lift)]"
               >
                 <CardHeader className="pb-4">
                   <div className="flex items-start justify-between gap-4">
                     <div>
                       <div className="font-display text-xl font-semibold">
-                        {p.title}
+                        {proj.title}
                       </div>
-                      <div className="mt-1 text-xs font-semibold uppercase tracking-[0.16em] text-indigo">
-                        {p.kicker}
-                      </div>
+                      {proj.kicker && (
+                        <div className="mt-1 text-xs font-semibold uppercase tracking-[0.16em] text-indigo">
+                          {proj.kicker}
+                        </div>
+                      )}
                     </div>
-                    <a
-                      href={p.repo}
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label={`${p.title} on GitHub`}
-                      className="rounded-md p-1.5 text-ink/50 transition-colors hover:bg-ink/5 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo"
-                    >
-                      <Github className="h-5 w-5" />
-                    </a>
+                    {href && (
+                      <a
+                        href={href}
+                        target="_blank"
+                        rel="noreferrer"
+                        aria-label={`${proj.title} — ${
+                          proj.repo ? "GitHub repository" : "visit site"
+                        }`}
+                        className="rounded-md p-1.5 text-ink/50 transition-colors hover:bg-ink/5 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo"
+                      >
+                        <LinkIcon className="h-5 w-5" />
+                      </a>
+                    )}
                   </div>
                 </CardHeader>
                 <CardContent>
                   <p className="text-base leading-relaxed text-ink/75">
-                    {p.outcome}
+                    {proj.outcome}
                   </p>
                   <div className="mt-5 flex flex-wrap gap-2">
-                    {p.tech.map((t) => (
+                    {proj.tech.map((t) => (
                       <Badge key={t} variant="outline">
                         {t}
                       </Badge>
@@ -390,7 +421,8 @@ export default function Portfolio() {
                   </div>
                 </CardContent>
               </Card>
-            ))}
+              );
+            })}
           </div>
         </section>
 
@@ -402,15 +434,15 @@ export default function Portfolio() {
             <SectionLabel n="05" en="Path" />
           </div>
           <ol className="flex flex-col">
-            {EXPERIENCE.map((job, i) => (
+            {experience.map((job, i) => (
               <li
-                key={job.company}
+                key={`${job.company}-${i}`}
                 className="reveal grid grid-cols-[auto_1fr] gap-x-5"
               >
                 {/* timeline gutter */}
                 <div className="flex flex-col items-center">
                   <span className="mt-1.5 h-2.5 w-2.5 rounded-full border-2 border-indigo bg-paper" />
-                  {i < EXPERIENCE.length - 1 && (
+                  {i < experience.length - 1 && (
                     <span className="my-1 w-px flex-1 bg-rule" />
                   )}
                 </div>
@@ -427,7 +459,7 @@ export default function Portfolio() {
                     {job.company}
                   </div>
                   <ul className="mt-3 flex flex-col gap-2">
-                    {job.points.map((pt, j) => (
+                    {(job.points || []).map((pt, j) => (
                       <li
                         key={j}
                         className="flex gap-2.5 text-sm leading-relaxed text-ink/70"
@@ -453,44 +485,42 @@ export default function Portfolio() {
           <div className="reveal">
             <SectionLabel n="06" en="Contact" />
             <h2 className="max-w-xl font-display text-3xl font-bold leading-tight tracking-tight sm:text-4xl">
-              Need a booking platform or CMS that holds up under real traffic?
+              {contactHeadline}
             </h2>
             <p className="mt-4 max-w-lg text-lg text-ink/65">
               That&apos;s the work I like most. Send a note — I reply to every
               real one.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-              <Button asChild>
-                <a href="mailto:nazmuldipu@gmail.com">
-                  <Mail /> nazmuldipu@gmail.com
-                </a>
-              </Button>
-              <Button variant="outline" asChild>
-                <a
-                  href="https://www.linkedin.com/in/nazmuldipu"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <Linkedin /> LinkedIn <ArrowUpRight />
-                </a>
-              </Button>
-              <Button variant="outline" asChild>
-                <a
-                  href="https://github.com/nazmuldipu"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <Github /> GitHub <ArrowUpRight />
-                </a>
-              </Button>
+              {socials.map((s, i) => {
+                const Icon = socialIcon(s);
+                const isMail = s.href.startsWith("mailto:");
+                const label = isMail ? s.href.replace("mailto:", "") : s.name;
+                return (
+                  <Button
+                    key={s.href}
+                    variant={i === 0 ? "default" : "outline"}
+                    asChild
+                  >
+                    <a
+                      href={s.href}
+                      {...(isMail
+                        ? {}
+                        : { target: "_blank", rel: "noreferrer" })}
+                    >
+                      <Icon /> {label}
+                      {!isMail && <ArrowUpRight />}
+                    </a>
+                  </Button>
+                );
+              })}
             </div>
           </div>
         </section>
 
         <Separator />
         <footer className="py-8 text-xs text-ink/40">
-          Designed &amp; built by Nazmul Alam · Bricolage Grotesque + IBM Plex
-          Sans
+          Designed &amp; built by {name} · Bricolage Grotesque + IBM Plex Sans
         </footer>
       </main>
     </div>
