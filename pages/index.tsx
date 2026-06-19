@@ -1,44 +1,39 @@
 import Head from "next/head";
-import Banner from "@/src/components/Templates/banner";
-import About from "@/src/components/about";
-import profile from "@/src/data/profile";
-import Experience from "@/src/components/Experience";
-import Footer from "@/src/components/Templates/footer";
-import { getProfile } from "@/src/sanity/lib/queries";
-import { formatSanityData } from "@/src/utils/utils";
-import NavbarComponent from "@/src/components/Templates/navbar";
+import imageUrlBuilder from "@sanity/image-url";
+import Portfolio from "@/src/components/Portfolio";
+import { client } from "@/src/sanity/lib/client";
+import { getPortfolioPage } from "@/src/sanity/lib/queries";
+import { mapPortfolio } from "@/src/utils/portfolioPage";
 
-const Home = ({ data }: { data: any }): JSX.Element => {
-  const fd = formatSanityData(data);
-  console.log({ fd, data });
-  return (
-    <div>
-      <Head>
-        <title>Nazmul Alam</title>
-        <meta
-          name="description"
-          content="This is a portfolio for Nazmul Alam"
-        />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <NavbarComponent navbar={fd.navbar} />
-      <Banner name={fd.name} about={fd.about} image={fd.image} />
-      <About about={profile.index.about} />
-      <Experience contribution={profile.index.contribution} />
-      <Footer />
-    </div>
-  );
-};
+const builder = imageUrlBuilder(client);
+const urlFor = (source: any, width: number, height: number) =>
+  source ? builder.image(source).width(width).height(height).fit("crop").url() : null;
 
 export async function getStaticProps() {
-  const data = await getProfile();
-
-  return {
-    props: {
-      data,
-    },
-  };
+  let data = null;
+  try {
+    const raw = await getPortfolioPage();
+    data = mapPortfolio(raw, urlFor);
+  } catch (e) {
+    // Leave data null — the component renders empty rather than stand-in copy.
+    data = null;
+  }
+  return { props: { data }, revalidate: 60 };
 }
 
-export default Home;
+export default function Home({ data }: { data: any }) {
+  return (
+    <>
+      <Head>
+        <title>Nazmul Alam — Senior Software Engineer</title>
+        <meta
+          name="description"
+          content="Senior Software Engineer — full-stack web applications across React, Svelte, Angular, Node and Java. Portfolio driven by Sanity CMS."
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <Portfolio data={data} />
+    </>
+  );
+}
