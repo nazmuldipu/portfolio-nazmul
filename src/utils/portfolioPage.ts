@@ -65,7 +65,7 @@ export function mapPortfolio(raw: any, urlFor: UrlFor) {
   if (!raw) return null;
   const about = raw.about || {};
   const avatarUrl = urlFor(raw.image, 180, 180);
-  const portraitUrl = urlFor(raw.image, 700, 875); // 4:5 portrait for the About section
+  const portraitUrl = urlFor(raw.image, 440, 550); // 4:5 portrait displayed at 220×275, 2× retina
   const edu0 = (raw.education || [])[0] || {};
   const degree = (edu0.degree || "").toString();
   const degreeShort = /master/i.test(degree)
