@@ -58,14 +58,14 @@ function Headline({ text, keyword }) {
 
 function SectionLabel({ n, en }) {
   return (
-    <div className="mb-8 flex items-baseline gap-3">
+    <h2 className="mb-8 mt-0 flex items-baseline gap-3 font-normal">
       <span className="font-display text-sm font-semibold text-indigo">
         {n}
       </span>
-      <span className="text-xs font-semibold uppercase tracking-[0.22em] text-ink/55">
+      <span className="text-xs font-semibold uppercase tracking-[0.22em] text-ink/70">
         {en}
       </span>
-    </div>
+    </h2>
   );
 }
 
@@ -115,7 +115,7 @@ function SyllabusRail({ active, name }) {
             >
               <span
                 className={`font-display text-xs font-semibold tabular-nums transition-colors ${
-                  isActive ? "text-indigo" : "text-ink/35"
+                  isActive ? "text-indigo" : "text-ink/60"
                 }`}
               >
                 {s.n}
@@ -123,12 +123,12 @@ function SyllabusRail({ active, name }) {
               <span className="flex flex-col">
                 <span
                   className={`text-sm transition-colors group-hover:text-ink ${
-                    isActive ? "font-semibold text-ink" : "text-ink/55"
+                    isActive ? "font-semibold text-ink" : "text-ink/70"
                   }`}
                 >
                   {s.en}
                 </span>
-                <span className="font-bengali text-[11px] leading-tight text-ink/30">
+                <span className="font-bengali text-[11px] leading-tight text-ink/60">
                   {s.bn}
                 </span>
               </span>
@@ -233,9 +233,9 @@ export default function Portfolio({ data }) {
           {/* subtle generated glow — low-intensity atmosphere behind the thesis */}
           <div aria-hidden className="hero-glow" />
           {locationLine && (
-            <p className="reveal text-sm text-ink/40">{locationLine}</p>
+            <p className="reveal text-sm text-ink/65">{locationLine}</p>
           )}
-          <p className="reveal mt-2 text-xs font-semibold uppercase tracking-[0.22em] text-ink/55">
+          <p className="reveal mt-2 text-xs font-semibold uppercase tracking-[0.22em] text-ink/70">
             {eyebrow}
           </p>
           <h1 className="reveal mt-6 font-display text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl md:text-6xl">
@@ -287,7 +287,7 @@ export default function Portfolio({ data }) {
                         className="h-full w-full object-cover"
                       />
                     ) : (
-                      <div className="flex h-full w-full items-center justify-center font-display text-4xl text-ink/40">
+                      <div className="flex h-full w-full items-center justify-center font-display text-4xl text-ink/65">
                         {initials}
                       </div>
                     )}
@@ -297,7 +297,7 @@ export default function Portfolio({ data }) {
               <div className="mt-5">
                 <div className="font-display text-lg font-semibold">{name}</div>
                 {locationLine && (
-                  <div className="text-sm text-ink/55">{locationLine}</div>
+                  <div className="text-sm text-ink/70">{locationLine}</div>
                 )}
               </div>
             </div>
@@ -516,7 +516,7 @@ export default function Portfolio({ data }) {
         </section>
 
         <Separator />
-        <footer className="py-8 text-xs text-ink/40">
+        <footer className="py-8 text-xs text-ink/65">
           Designed &amp; built by {name} · Bricolage Grotesque + IBM Plex Sans
         </footer>
       </main>

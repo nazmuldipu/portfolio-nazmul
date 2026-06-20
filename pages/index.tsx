@@ -7,7 +7,7 @@ import { mapPortfolio } from "@/src/utils/portfolioPage";
 
 const builder = imageUrlBuilder(client);
 const urlFor = (source: any, width: number, height: number) =>
-  source ? builder.image(source).width(width).height(height).fit("crop").url() : null;
+  source ? builder.image(source).width(width).height(height).fit("crop").auto("format").url() : null;
 
 export async function getStaticProps() {
   let data = null;
@@ -32,6 +32,8 @@ export default function Home({ data }: { data: any }) {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
       </Head>
       <Portfolio data={data} />
     </>
