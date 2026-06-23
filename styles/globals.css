@@ -1,101 +1,67 @@
-/* Step 1 portfolio pairing: Bricolage Grotesque (display) + IBM Plex Sans (body),
-   with IBM Plex Sans Bengali to render the bilingual section labels natively. */
-@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Bengali:wght@400;500&display=swap");
+/* Cefalo design system — Inter (UI/display) + JetBrains Mono (labels, dates,
+   numbers, chips). Inter loads variable from rsms.me; JetBrains Mono from Google. */
+@import url("https://rsms.me/inter/inter.css");
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap");
 @import "./variables.css";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ── Step 1 design tokens (scoped so they never touch the existing Sanity site).
-   Values are space-separated RGB channels so Tailwind tokens can apply opacity
-   (rgb(var(--ink) / <alpha-value>)). Dark mode swaps these six lines — every
-   color on the page is token-derived, so nothing else has to change. ── */
+/* ── Cefalo tokens, scoped to the portfolio so they never touch the rest of the
+   Sanity site. Values are space-separated RGB channels so Tailwind tokens can
+   apply opacity, e.g. text-ink/70 → rgb(var(--ink) / 0.7). This is a fixed
+   light + navy design (no dark-mode swap) — the navy surfaces are always navy. ── */
 .portfolio-root {
-  --paper: 246 247 249; /* cool near-white background */
-  --card: 255 255 255; /* surfaces */
-  --ink: 23 28 38; /* primary text */
-  --rule: 219 224 231; /* hairlines, borders, the syllabus rail */
-  --marker: 255 210 63; /* highlighter accent — used only behind key words */
-  --indigo: 59 76 202; /* structural accent — links, focus, active rail */
-  --on-marker: 23 28 38; /* fixed dark text on the always-yellow highlight */
-  --lift: 0 1px 24px -12px rgb(23 28 38 / 0.35); /* card hover shadow */
+  --navy: 0 64 129;        /* #004081 — dominant primary */
+  --navy-90: 26 83 148;    /* #1A5394 */
+  --navy-70: 77 122 170;   /* #4D7AAA */
+  --navy-20: 204 217 230;  /* #CCD9E6 */
+  --navy-tint: 230 238 245;/* #E6EEF5 */
+  --green: 87 161 31;      /* #57A11F — accent / positive */
+  --cyan: 0 169 220;       /* #00A9DC — accent / action / links */
+  --cyan-90: 26 179 223;   /* #1AB3DF */
+  --ink: 10 10 10;         /* #0A0A0A — body text on light */
+  --graphite: 74 74 74;    /* #4A4A4A — secondary text, captions */
+  --mist: 244 246 248;     /* #F4F6F8 — alt surface */
+  --paper: 255 255 255;    /* #FFFFFF — default canvas */
+  --card: 255 255 255;
+  --rule: 224 228 232;     /* #E0E4E8 — hairline borders, dividers */
 
-  --font-display: "Bricolage Grotesque", "Georgia", serif;
-  --font-body: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-bengali: "IBM Plex Sans Bengali", "IBM Plex Sans", sans-serif;
+  --font-display: "InterVariable", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-body: "InterVariable", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
   background-color: rgb(var(--paper));
   color: rgb(var(--ink));
   font-family: var(--font-body);
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Dark mode: re-theme by swapping the same six tokens. Marker stays yellow
-   (its text uses the fixed --on-marker), indigo lightens for contrast. */
-@media (prefers-color-scheme: dark) {
+@supports not (font-variation-settings: normal) {
   .portfolio-root {
-    --paper: 14 17 22;
-    --card: 22 27 34;
-    --ink: 230 233 238;
-    --rule: 42 49 60;
-    --marker: 255 210 63;
-    --indigo: 139 155 255;
-    --on-marker: 23 28 38;
-    --lift: 0 1px 30px -10px rgb(0 0 0 / 0.75);
+    --font-display: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   }
 }
 
 .portfolio-root .font-display {
   font-family: var(--font-display);
 }
-.portfolio-root .font-bengali {
-  font-family: var(--font-bengali);
-}
 
-/* The single orchestrated motion: section content rises + fades in on scroll. */
+/* The single orchestrated motion: section content rises + fades in on scroll.
+   Calm only — short, eased, no parallax (per the design's motion guidance). */
 .portfolio-root .reveal {
   opacity: 0;
-  transform: translateY(18px);
-  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(16px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: opacity, transform;
 }
 .portfolio-root .reveal.is-visible {
   opacity: 1;
   transform: none;
-}
-
-/* Hero atmosphere: two soft, palette-tinted glows that drift slowly behind the
-   thesis. Kept low-opacity and blurred so the marker accent stays the loud one. */
-.portfolio-root .hero-glow {
-  position: absolute;
-  inset: 0 -8% 0 -8%;
-  z-index: -1;
-  pointer-events: none;
-  background:
-    radial-gradient(
-      46% 46% at 18% 42%,
-      rgb(var(--indigo) / 0.24),
-      transparent 70%
-    ),
-    radial-gradient(
-      42% 46% at 78% 56%,
-      rgb(var(--marker) / 0.3),
-      transparent 70%
-    );
-  filter: blur(60px);
-  opacity: 0.75;
-  animation: hero-drift 22s ease-in-out infinite alternate;
-}
-
-@keyframes hero-drift {
-  from {
-    transform: translate3d(-2%, -1%, 0) scale(1);
-  }
-  to {
-    transform: translate3d(3%, 2%, 0) scale(1.08);
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -104,9 +70,12 @@
     transform: none;
     transition: none;
   }
-  .portfolio-root .hero-glow {
-    animation: none;
-  }
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Offset in-page anchors for the 72px sticky nav. */
+  scroll-padding-top: 72px;
 }
 
 html,

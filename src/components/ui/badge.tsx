@@ -3,18 +3,24 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/src/lib/utils";
 
+// Cefalo chips. `tech` = filled navy-tint chip used on work cards. `techGhost`
+// = lighter outline chip used in the experience timeline. `skill` = the toolbox
+// chip (Inter, white fill). Mono variants carry tabular figures for dates/tech.
 const badgeVariants = cva(
-  "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium transition-colors focus:outline-none",
+  "inline-flex items-center rounded-full border transition-colors focus:outline-none",
   {
     variants: {
       variant: {
-        default: "border-rule bg-ink/5 text-ink/80",
-        accent: "border-transparent bg-marker/30 text-ink",
-        outline: "border-ink/15 text-ink/70",
+        tech: "border-navy-20 bg-navy-tint px-[11px] py-[5px] font-mono text-xs text-navy",
+        techGhost:
+          "border-rule bg-transparent px-[11px] py-[5px] font-mono text-xs text-graphite",
+        skill:
+          "border-rule bg-paper px-4 py-2 text-sm font-medium text-ink hover:border-navy-20",
+        default: "border-rule bg-mist px-2.5 py-0.5 text-xs font-medium text-ink/80",
       },
     },
     defaultVariants: {
-      variant: "default",
+      variant: "tech",
     },
   }
 );

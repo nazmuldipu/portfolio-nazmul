@@ -1,210 +1,354 @@
 import { useEffect, useState } from "react";
-import { ArrowDown, ArrowUpRight, Download, Mail } from "lucide-react";
-// lucide-react dropped brand icons; react-icons (Feather set) matches its style.
-import { FiGithub as Github, FiLinkedin as Linkedin } from "react-icons/fi";
 
 import { Button } from "@/src/components/ui/button";
 import { Badge } from "@/src/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-} from "@/src/components/ui/card";
-import { Separator } from "@/src/components/ui/separator";
 import { AspectRatio } from "@/src/components/ui/aspect-ratio";
 
-// ── Content ─────────────────────────────────────────────────────────────────
-// The syllabus rail is the signature element: a numbered spine that doubles as
-// nav and scroll-progress. Bengali labels are real (Nazmul is a native speaker) —
-// a quiet personal touch rather than a gimmick.
-const SECTIONS = [
-  { id: "top", n: "01", en: "Thesis", bn: "ভূমিকা" },
-  { id: "about", n: "02", en: "About", bn: "পরিচিতি" },
-  { id: "experience", n: "03", en: "Path", bn: "পথ" },
-  { id: "skills", n: "04", en: "Stack", bn: "দক্ষতা" },
-  { id: "work", n: "05", en: "Work", bn: "কাজ" },
-  { id: "contact", n: "06", en: "Contact", bn: "যোগাযোগ" },
+// ── Layout constants ──────────────────────────────────────────────────────────
+// Single 1180px content column, centered, 40px horizontal padding (per the
+// Cefalo handoff). Section vertical rhythm: ~104px light, ~120px navy.
+const COL = "mx-auto w-full max-w-[1180px] px-6 md:px-10";
+
+// In-page section nav (information architecture — the only hard-coded labels).
+const NAV_LINKS = [
+  { href: "#work", label: "Work" },
+  { href: "#experience", label: "Experience" },
+  { href: "#skills", label: "Skills" },
 ];
 
-// Every piece of profile content comes from Sanity (the `data` prop). There are
-// no content fallbacks: if a field is missing, its block renders empty rather
-// than showing stand-in copy, so nothing on the page is ever stale or invented.
-// `SECTIONS` above is the only hard-coded text — it's the site's section nav
-// (information architecture), not profile data. The CV path below is the lone
-// exception: it falls back to the real PDF committed in /public.
-const CV_FALLBACK = "/nazmul_alam_cv.pdf";
+// Editorial section headings from the design reference. These are layout copy
+// (like the section labels), not profile data — all substantive content below
+// is sourced from Sanity via the `data` prop.
+const HEADINGS = {
+  about: "Hand me the feature your team is wary of.",
+  work: "Things I’ve built and shipped.",
+  workIntro:
+    "From a nationwide math platform to hotel booking engines and high-performance static sites.",
+  experience: "Eight years across product teams.",
+  skills: "What I work with.",
+};
+
+// The static-site builds are presented as one navy module grouping the live
+// links; its framing copy is design-level, the tiles themselves come from Sanity.
+const SITES_CARD = {
+  label: "2021 → 2022 · ELEVENTY",
+  title: "High-performance static sites",
+  description:
+    "A set of fast, lean marketing sites for hotels and restaurants — built on Eleventy, ES6, and Tailwind for near-instant loads.",
+};
+
+const ABOUT_STATS = [
+  { n: "8+", c: "Years shipping production web apps" },
+  { n: "Full-stack", c: "Java & Node · React, Svelte, Angular" },
+  { n: "Lead", c: "Design & code reviews · mentoring" },
+];
+
+const CONTACT_FALLBACK =
+  "I take on freelance and consulting work. Tell me what you’re building and I’ll tell you how I’d approach it.";
+
+// ── Brand marks (Cefalo) ──────────────────────────────────────────────────────
+function DotStack({ className }) {
+  return (
+    <svg
+      className={className}
+      viewBox="-1 -1 8 26"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-label="Cefalo dot mark"
+    >
+      <circle cx="3" cy="3" r="3" fill="#57A11F" />
+      <circle cx="3" cy="12" r="3" fill="#00A9DC" />
+      <circle cx="3" cy="21" r="3" fill="#004081" />
+    </svg>
+  );
+}
+
+// Faint "iC" watermark used as decorative texture on the navy surfaces.
+function Watermark({ className }) {
+  return (
+    <svg
+      aria-hidden
+      className={className}
+      viewBox="-16 -16 418 392"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <circle cx="45" cy="45" r="45" fill="#FFFFFF" />
+      <circle cx="45" cy="180" r="45" fill="#FFFFFF" />
+      <circle cx="45" cy="315" r="45" fill="#FFFFFF" />
+      <path
+        d="M369.429 345H219.429C186.292 345 159.429 318.137 159.429 285L159.429 75C159.429 41.8629 186.292 15 219.429 15H369.429"
+        stroke="#FFFFFF"
+        strokeWidth="30"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
 
 // ── Small presentational helpers ──────────────────────────────────────────────
-function Highlight({ children }) {
+// Eyebrow: colored bar + mono uppercase label. Green on light, cyan on navy.
+function Eyebrow({ tone = "green", children }) {
+  const bar = tone === "cyan" ? "bg-cyan" : "bg-green";
+  const text = tone === "cyan" ? "text-white/70" : "text-graphite";
   return (
-    <span className="box-decoration-clone rounded-[2px] bg-marker/70 px-1.5 text-on-marker">
-      {children}
-    </span>
-  );
-}
-
-// Highlights the first occurrence of `keyword` inside `text` (CMS-driven accent).
-function Headline({ text, keyword }) {
-  const i = keyword ? text.indexOf(keyword) : -1;
-  if (i === -1) return <>{text}</>;
-  return (
-    <>
-      {text.slice(0, i)}
-      <Highlight>{keyword}</Highlight>
-      {text.slice(i + keyword.length)}
-    </>
-  );
-}
-
-function SectionLabel({ n, en }) {
-  return (
-    <h2 className="mb-8 mt-0 flex items-baseline gap-3 font-normal">
-      <span className="font-display text-sm font-semibold text-indigo">
-        {n}
+    <div className="flex items-center gap-3">
+      <span aria-hidden className={`h-0.5 w-8 shrink-0 ${bar}`} />
+      <span
+        className={`font-mono text-[13px] font-medium uppercase tracking-[0.14em] ${text}`}
+      >
+        {children}
       </span>
-      <span className="text-xs font-semibold uppercase tracking-[0.22em] text-ink/70">
-        {en}
-      </span>
-    </h2>
+    </div>
   );
 }
 
-function socialIcon(s) {
-  const slug = (s.slug || s.name || "").toLowerCase();
-  if (slug.includes("git")) return Github;
-  if (slug.includes("link")) return Linkedin;
-  return Mail;
-}
+const hostLabel = (url) =>
+  (url || "")
+    .replace(/^https?:\/\//, "")
+    .replace(/^www\./, "")
+    .replace(/\/$/, "");
 
-// ── The signature element: persistent syllabus rail ──────────────────────────
-function SyllabusRail({ active, name }) {
-  const index = Math.max(
-    0,
-    SECTIONS.findIndex((s) => s.id === active)
-  );
-  const progress = ((index + 1) / SECTIONS.length) * 100;
+const formatPhone = (phone) =>
+  (phone || "").replace(/^(\+\d{3})(\d{4})(\d+)$/, "$1 $2 $3");
 
-  const go = (id) => {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-
+function TechChips({ items, tone = "tech" }) {
+  if (!items?.length) return null;
   return (
-    <nav
-      aria-label="Sections"
-      className="fixed left-0 top-0 z-20 hidden h-screen w-56 flex-col justify-center px-8 lg:flex"
+    <div className="flex flex-wrap gap-2">
+      {items.map((t) => (
+        <Badge key={t} variant={tone}>
+          {t}
+        </Badge>
+      ))}
+    </div>
+  );
+}
+
+// Cyan live-link with an arrow that nudges right on hover.
+function LiveLink({ href, children }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group/link mt-5 inline-flex items-center gap-1.5 font-semibold text-cyan transition-colors hover:text-cyan-90"
     >
-      <div className="mb-10 font-display text-base font-bold tracking-tight">
-        {name}
-      </div>
-      <div className="relative flex flex-col gap-5 pl-5">
-        {/* spine + marker-yellow progress fill */}
-        <span className="absolute left-0 top-1 bottom-1 w-px bg-rule" />
-        <span
-          className="absolute left-0 top-1 w-px bg-marker transition-[height] duration-500 ease-out"
-          style={{ height: `calc(${progress}% - 0.25rem)` }}
-        />
-        {SECTIONS.map((s) => {
-          const isActive = s.id === active;
-          return (
-            <button
-              key={s.id}
-              type="button"
-              onClick={() => go(s.id)}
-              className="group flex items-baseline gap-2 rounded-sm text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo focus-visible:ring-offset-4 focus-visible:ring-offset-paper"
-            >
-              <span
-                className={`font-display text-xs font-semibold tabular-nums transition-colors ${
-                  isActive ? "text-indigo" : "text-ink/60"
-                }`}
+      {children}
+      <span className="transition-transform duration-200 group-hover/link:translate-x-1">
+        →
+      </span>
+    </a>
+  );
+}
+
+// ── Sticky top nav ────────────────────────────────────────────────────────────
+function Nav({ name }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <header className="sticky top-0 z-50 h-[72px] border-b border-rule bg-white/[0.86] backdrop-blur-[12px] backdrop-saturate-150">
+      <div className={`${COL} flex h-full items-center justify-between`}>
+        <a href="#top" className="flex items-center gap-2.5">
+          <DotStack className="h-6 w-1.5" />
+          <span className="text-[17px] font-bold tracking-[-0.01em] text-navy">
+            {name}
+          </span>
+        </a>
+
+        <nav className="flex items-center gap-7">
+          <div className="hidden items-center gap-7 md:flex">
+            {NAV_LINKS.map((l) => (
+              <a
+                key={l.href}
+                href={l.href}
+                className="text-[15px] font-medium text-ink transition-colors hover:text-cyan"
               >
-                {s.n}
-              </span>
-              <span className="flex flex-col">
-                <span
-                  className={`text-sm transition-colors group-hover:text-ink ${
-                    isActive ? "font-semibold text-ink" : "text-ink/70"
-                  }`}
-                >
-                  {s.en}
-                </span>
-                <span className="font-bengali text-[11px] leading-tight text-ink/60">
-                  {s.bn}
-                </span>
-              </span>
-            </button>
-          );
-        })}
+                {l.label}
+              </a>
+            ))}
+          </div>
+          <Button asChild size="sm" className="h-auto px-5 py-2.5">
+            <a href="#contact">Get in touch</a>
+          </Button>
+          <button
+            type="button"
+            aria-label="Toggle menu"
+            aria-expanded={open}
+            onClick={() => setOpen((v) => !v)}
+            className="flex h-9 w-9 items-center justify-center rounded-md text-navy md:hidden"
+          >
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path
+                d={open ? "M5 5l10 10M15 5L5 15" : "M3 6h14M3 10h14M3 14h14"}
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+              />
+            </svg>
+          </button>
+        </nav>
       </div>
-    </nav>
+
+      {/* Mobile menu */}
+      {open && (
+        <div className="border-b border-rule bg-white/95 backdrop-blur-[12px] md:hidden">
+          <div className={`${COL} flex flex-col gap-1 py-3`}>
+            {NAV_LINKS.map((l) => (
+              <a
+                key={l.href}
+                href={l.href}
+                onClick={() => setOpen(false)}
+                className="rounded-md py-2 text-[15px] font-medium text-ink hover:text-cyan"
+              >
+                {l.label}
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+    </header>
+  );
+}
+
+// ── Project cards ─────────────────────────────────────────────────────────────
+function FeatureCard({ project }) {
+  return (
+    <article className="reveal group grid overflow-hidden rounded-[24px] border border-rule bg-white transition-[border-color,box-shadow] duration-200 hover:border-navy-20 hover:shadow-[0_14px_40px_rgba(0,64,129,0.08)] md:grid-cols-[1.05fr_0.95fr]">
+      {project.image && (
+        <div className="overflow-hidden bg-mist">
+          <AspectRatio ratio={1}>
+            <img
+              src={project.image}
+              alt={project.title}
+              className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+            />
+          </AspectRatio>
+        </div>
+      )}
+      <div className="flex flex-col p-8 md:p-10">
+        <div className="font-mono text-xs font-medium uppercase tracking-[0.1em] text-green">
+          {project.label}
+        </div>
+        <h3 className="mt-3 font-display text-[26px] font-bold leading-tight tracking-[-0.01em] text-navy md:text-[30px]">
+          {project.title}
+        </h3>
+        <p className="mt-3 max-w-[52ch] text-[15px] leading-[1.6] text-graphite md:text-base">
+          {project.description}
+        </p>
+        <div className="mt-auto pt-7">
+          <TechChips items={project.tech} />
+        </div>
+        {project.url && (
+          <LiveLink href={project.url}>{hostLabel(project.url)}</LiveLink>
+        )}
+      </div>
+    </article>
+  );
+}
+
+function ProjectCard({ project }) {
+  return (
+    <article className="reveal group flex flex-col overflow-hidden rounded-[24px] border border-rule bg-white transition-[border-color,box-shadow] duration-200 hover:border-navy-20 hover:shadow-[0_14px_40px_rgba(0,64,129,0.08)]">
+      {project.image && (
+        <div className="overflow-hidden border-b border-rule bg-mist">
+          <AspectRatio ratio={16 / 10}>
+            <img
+              src={project.image}
+              alt={project.title}
+              loading="lazy"
+              className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+            />
+          </AspectRatio>
+        </div>
+      )}
+      <div className="flex flex-1 flex-col p-8">
+        <div className="font-mono text-xs font-medium uppercase tracking-[0.1em] text-graphite">
+          {project.label}
+        </div>
+        <h3 className="mt-2.5 font-display text-[23px] font-bold leading-tight tracking-[-0.01em] text-navy">
+          {project.title}
+        </h3>
+        <p className="mt-2.5 text-[15px] leading-[1.6] text-graphite">
+          {project.description}
+        </p>
+        <div className="mt-auto pt-7">
+          <TechChips items={project.tech} />
+        </div>
+        {project.url && <LiveLink href={project.url}>Live</LiveLink>}
+      </div>
+    </article>
+  );
+}
+
+function SitesCard({ links }) {
+  return (
+    <article className="reveal grid gap-8 overflow-hidden rounded-[24px] bg-navy p-8 text-white md:grid-cols-[0.8fr_1.2fr] md:p-10">
+      <div>
+        <div className="font-mono text-xs font-medium uppercase tracking-[0.1em] text-cyan">
+          {SITES_CARD.label}
+        </div>
+        <h3 className="mt-3 font-display text-[26px] font-bold leading-tight tracking-[-0.01em] md:text-[30px]">
+          {SITES_CARD.title}
+        </h3>
+        <p className="mt-3 max-w-[40ch] text-[15px] leading-[1.6] text-white/75">
+          {SITES_CARD.description}
+        </p>
+      </div>
+      <div className="grid gap-3 sm:grid-cols-2">
+        {links.map((t) => (
+          <a
+            key={t.href}
+            href={t.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group/tile flex items-center justify-between gap-3 rounded-[14px] border border-white/[0.18] px-4 py-3.5 transition-colors hover:bg-white/[0.08]"
+          >
+            <span className="text-[15px] font-medium">{t.label}</span>
+            <span className="text-cyan transition-transform duration-200 group-hover/tile:translate-x-1">
+              →
+            </span>
+          </a>
+        ))}
+      </div>
+    </article>
   );
 }
 
 // ── Page ──────────────────────────────────────────────────────────────────────
-export default function Portfolio({ data }) {
-  const [active, setActive] = useState("top");
-
-  // All profile content is sourced from Sanity (the `data` prop). Missing
-  // fields resolve to empty, never to invented copy.
+export default function Portfolio({
+  data,
+  showStats = true,
+  showWatermark = true,
+}) {
+  // All profile content is sourced from Sanity (the `data` prop). Missing fields
+  // resolve to empty, never to invented copy.
   const p = data || {};
   const name = p.name || "";
-  const locationLine = [p.location?.city, p.location?.country]
-    .filter(Boolean)
-    .join(", ");
-  const eyebrow = p.eyebrow || "";
+  const role = p.role || "";
+  const city = p.location?.city || "";
+  const country = p.location?.country || "";
+  const locationLine = [city, country].filter(Boolean).join(", ");
   const headline = p.headline || "";
-  const highlight = p.highlight || "";
   const intro = p.intro || "";
-  const aboutSubtitle = p.about?.subtitle || "";
-  const eduLine = p.about?.eduLine || "";
-  const avatarUrl = p.avatarUrl || null;
-  const portraitUrl = p.portraitUrl || avatarUrl;
+  const portraitUrl = p.portraitUrl || null;
+  const aboutLead = p.aboutLead || "";
+  const feature = p.projects?.feature || null;
+  const standard = p.projects?.standard || [];
+  const siteLinks = p.projects?.siteLinks || [];
   const skillGroups = p.skillGroups || [];
   const experience = p.experience || [];
-  const currentCompany = (experience[0]?.company || "").split(",")[0].trim();
-  const aboutFacts = [
-    eyebrow && {
-      label: "Currently",
-      value: currentCompany ? `${eyebrow} at ${currentCompany}` : eyebrow,
-    },
-    locationLine && { label: "Based in", value: locationLine },
-    eduLine && { label: "Education", value: eduLine },
-  ].filter(Boolean);
+  const education = p.education || [];
+  const contact = p.contact || {};
   const socials = p.socials || [];
-  const projects = p.projects || [];
-  const contactHeadline = p.contactHeadline || "";
-  const contactSubtitle = p.contactSubtitle || "";
-  const cvUrl = p.cvUrl || CV_FALLBACK;
-  const initials =
-    name
-      .split(" ")
-      .map((w) => w[0])
-      .join("")
-      .slice(0, 2)
-      .toUpperCase() || "·";
 
+  // Reveal-on-scroll: a single, calm fade-up for content as it enters view.
   useEffect(() => {
-    // Track the active section for the rail.
-    const sectionObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) setActive(e.target.id);
-        });
-      },
-      { rootMargin: "-45% 0px -50% 0px" }
-    );
-    SECTIONS.forEach((s) => {
-      const el = document.getElementById(s.id);
-      if (el) sectionObserver.observe(el);
-    });
-
-    // The single orchestrated motion: reveal each block once as it enters view.
-    const revealObserver = new IntersectionObserver(
+    const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
           if (e.isIntersecting) {
             e.target.classList.add("is-visible");
-            revealObserver.unobserve(e.target);
+            observer.unobserve(e.target);
           }
         });
       },
@@ -212,314 +356,316 @@ export default function Portfolio({ data }) {
     );
     document
       .querySelectorAll(".portfolio-root .reveal")
-      .forEach((el) => revealObserver.observe(el));
-
-    return () => {
-      sectionObserver.disconnect();
-      revealObserver.disconnect();
-    };
+      .forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
   }, []);
 
   return (
-    <div className="portfolio-root min-h-screen">
-      <SyllabusRail active={active} name={name} />
+    <div className="portfolio-root min-h-screen bg-paper">
+      <Nav name={name} />
 
-      <main className="mx-auto max-w-3xl px-6 sm:px-8 lg:ml-56 lg:max-w-3xl lg:px-16 xl:ml-72">
-        {/* 01 — HERO / THESIS */}
-        <section
-          id="top"
-          className="relative isolate flex min-h-screen flex-col justify-center overflow-hidden py-20"
+      {/* ── HERO (navy) ── */}
+      <section
+        id="top"
+        className="relative isolate overflow-hidden bg-navy text-white"
+      >
+        {showWatermark && (
+          <Watermark className="pointer-events-none absolute -bottom-10 right-0 w-[560px] max-w-[60%] opacity-[0.06]" />
+        )}
+        <div
+          className={`${COL} grid items-center gap-12 py-24 md:grid-cols-[1.15fr_0.85fr] md:gap-[72px] md:py-[120px]`}
         >
-          {/* subtle generated glow — low-intensity atmosphere behind the thesis */}
-          <div aria-hidden className="hero-glow" />
-          {locationLine && (
-            <p className="reveal text-sm text-ink/65">{locationLine}</p>
-          )}
-          <p className="reveal mt-2 text-xs font-semibold uppercase tracking-[0.22em] text-ink/70">
-            {eyebrow}
-          </p>
-          <h1 className="reveal mt-6 font-display text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl md:text-6xl">
-            <Headline text={headline} keyword={highlight} />
-          </h1>
-          <p className="reveal mt-7 max-w-xl text-lg leading-relaxed text-ink/70">
-            {intro}
-          </p>
-          <div className="reveal mt-9 flex flex-col gap-3 sm:flex-row">
-            <Button
-              size="lg"
-              className="group"
-              onClick={() =>
-                document
-                  .getElementById("work")
-                  ?.scrollIntoView({ behavior: "smooth" })
-              }
-            >
-              View projects{" "}
-              <ArrowDown className="transition-transform duration-200 group-hover:translate-y-0.5" />
-            </Button>
-            <Button size="lg" variant="outline" asChild>
-              <a href={cvUrl} target="_blank" rel="noreferrer">
-                Download CV <Download />
-              </a>
-            </Button>
+          <div>
+            <Eyebrow tone="cyan">
+              {[role, locationLine].filter(Boolean).join(" · ")}
+            </Eyebrow>
+            <h1 className="mt-6 max-w-[14ch] font-display text-[40px] font-bold leading-[1.05] tracking-[-0.025em] sm:text-[52px] md:text-[60px]">
+              {headline}
+            </h1>
+            <p className="mt-7 max-w-[54ch] text-[17px] leading-[1.6] text-white/[0.78] md:text-[19px]">
+              {intro}
+            </p>
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+              <Button variant="onNavy" size="lg" asChild>
+                <a href="#contact">Start a project</a>
+              </Button>
+              <Button variant="onNavyOutline" size="lg" asChild>
+                <a href="#work">See selected work</a>
+              </Button>
+            </div>
+            <div className="mt-9 inline-flex items-center gap-2.5 rounded-full border border-white/20 px-4 py-2">
+              <span className="h-2 w-2 rounded-full bg-green ring-4 ring-green/25" />
+              <span className="font-mono text-[13px] text-white/80">
+                Available for freelance &amp; consulting
+              </span>
+            </div>
           </div>
-        </section>
 
-        <Separator />
-
-        {/* 02 — ABOUT */}
-        <section id="about" className="py-20 md:py-28">
-          <SectionLabel n="02" en="About" />
-          <div className="grid gap-9 md:grid-cols-[220px_1fr] md:gap-12">
-            {/* framed portrait — the section's focal point */}
-            <div className="reveal">
-              <div className="relative isolate w-full max-w-[260px] md:max-w-none">
-                <div
-                  aria-hidden
-                  className="absolute inset-0 translate-x-3 translate-y-3 rounded-2xl bg-indigo/10"
+          {portraitUrl && (
+            <div className="overflow-hidden rounded-[20px] bg-white/5">
+              <AspectRatio ratio={4 / 5}>
+                <img
+                  src={portraitUrl}
+                  alt={name}
+                  className="h-full w-full object-cover"
                 />
-                <div className="relative overflow-hidden rounded-2xl bg-ink/5 shadow-[var(--lift)] ring-1 ring-rule">
-                  <AspectRatio ratio={4 / 5}>
-                    {portraitUrl ? (
-                      <img
-                        src={portraitUrl}
-                        alt={name}
-                        className="h-full w-full object-cover"
-                      />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center font-display text-4xl text-ink/65">
-                        {initials}
-                      </div>
-                    )}
-                  </AspectRatio>
-                </div>
-              </div>
-              <div className="mt-5">
-                <div className="font-display text-lg font-semibold">{name}</div>
-                {locationLine && (
-                  <div className="text-sm text-ink/70">{locationLine}</div>
-                )}
-              </div>
+              </AspectRatio>
             </div>
+          )}
+        </div>
+      </section>
 
-            {/* narrative + structured facts */}
-            <div className="reveal">
-              <p className="text-xl leading-relaxed text-ink/80 md:text-2xl md:leading-relaxed">
-                {aboutSubtitle}
-              </p>
-              {aboutFacts.length > 0 && (
-                <dl className="mt-9 flex flex-col gap-4 border-t border-rule pt-7">
-                  {aboutFacts.map((f) => (
-                    <div key={f.label} className="flex flex-col gap-1 sm:flex-row sm:gap-6">
-                      <dt className="w-28 shrink-0 pt-0.5 text-xs font-semibold uppercase tracking-[0.16em] text-indigo">
-                        {f.label}
-                      </dt>
-                      <dd className="text-sm leading-relaxed text-ink/80">
-                        {f.value}
-                      </dd>
-                    </div>
-                  ))}
-                </dl>
-              )}
-            </div>
-          </div>
-        </section>
-
-        <Separator />
-
-        {/* 03 — PATH */}
-        <section id="experience" className="py-20 md:py-28">
+      {/* ── ABOUT (paper) ── */}
+      <section id="about" className="bg-paper">
+        <div
+          className={`${COL} grid gap-12 py-20 md:grid-cols-[0.9fr_1.1fr] md:gap-[72px] md:py-[104px]`}
+        >
           <div className="reveal">
-            <SectionLabel n="03" en="Path" />
+            <Eyebrow tone="green">About</Eyebrow>
+            <h2 className="mt-5 max-w-[16ch] font-display text-[32px] font-bold leading-[1.15] tracking-[-0.02em] text-navy md:text-[38px]">
+              {HEADINGS.about}
+            </h2>
           </div>
-          <ol className="flex flex-col">
+          <div className="reveal">
+            <p className="max-w-[60ch] text-lg leading-[1.6] text-ink md:text-xl">
+              {aboutLead}
+            </p>
+            {showStats && (
+              <dl className="mt-12 grid grid-cols-1 gap-8 border-t border-rule pt-10 sm:grid-cols-3">
+                {ABOUT_STATS.map((s) => (
+                  <div key={s.c}>
+                    <dt className="font-mono text-[40px] font-bold leading-none text-navy tabular-nums">
+                      {s.n}
+                    </dt>
+                    <dd className="mt-3 text-sm leading-[1.5] text-graphite">
+                      {s.c}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* ── SELECTED WORK (mist) ── */}
+      <section id="work" className="bg-mist">
+        <div className={`${COL} py-20 md:py-[104px]`}>
+          <div className="reveal flex flex-wrap items-end justify-between gap-6">
+            <div>
+              <Eyebrow tone="green">Selected work</Eyebrow>
+              <h2 className="mt-5 font-display text-[32px] font-bold leading-[1.15] tracking-[-0.02em] text-navy md:text-[38px]">
+                {HEADINGS.work}
+              </h2>
+            </div>
+            <p className="max-w-[40ch] text-base leading-[1.6] text-graphite">
+              {HEADINGS.workIntro}
+            </p>
+          </div>
+
+          <div className="mt-12 flex flex-col gap-7">
+            {feature && <FeatureCard project={feature} />}
+            {standard.length > 0 && (
+              <div className="grid gap-7 md:grid-cols-2">
+                {standard.map((proj) => (
+                  <ProjectCard key={proj.title} project={proj} />
+                ))}
+              </div>
+            )}
+            {siteLinks.length > 0 && <SitesCard links={siteLinks} />}
+          </div>
+        </div>
+      </section>
+
+      {/* ── EXPERIENCE (paper) ── */}
+      <section id="experience" className="bg-paper">
+        <div className={`${COL} py-20 md:py-[104px]`}>
+          <div className="reveal">
+            <Eyebrow tone="green">Experience</Eyebrow>
+            <h2 className="mt-5 font-display text-[32px] font-bold leading-[1.15] tracking-[-0.02em] text-navy md:text-[38px]">
+              {HEADINGS.experience}
+            </h2>
+          </div>
+
+          <div className="mt-12 border-t border-rule">
             {experience.map((job, i) => (
-              <li
+              <div
                 key={`${job.company}-${i}`}
-                className="reveal grid grid-cols-[auto_1fr] gap-x-5"
+                className="reveal grid gap-4 border-b border-rule py-9 md:grid-cols-[200px_1fr] md:gap-10"
               >
-                {/* timeline gutter */}
-                <div className="flex flex-col items-center">
-                  <span className="mt-1.5 h-2.5 w-2.5 rounded-full border-2 border-indigo bg-paper" />
-                  {i < experience.length - 1 && (
-                    <span className="my-1 w-px flex-1 bg-rule" />
+                <div>
+                  <div className="font-mono text-[13px] text-graphite tabular-nums">
+                    {job.period}
+                  </div>
+                  {job.location && (
+                    <div className="mt-1 text-sm text-navy-70">
+                      {job.location}
+                    </div>
                   )}
                 </div>
-                <div className="pb-10">
-                  <div className="flex flex-wrap items-baseline justify-between gap-x-4">
-                    <h3 className="font-display text-lg font-semibold">
-                      {job.role}
-                    </h3>
-                    <span className="text-xs font-medium tabular-nums text-ink/45">
-                      {job.period}
-                    </span>
-                  </div>
-                  <div className="text-sm font-medium text-indigo">
+                <div>
+                  <h3 className="font-display text-[22px] font-bold leading-tight tracking-[-0.01em] text-navy">
+                    {job.role}
+                  </h3>
+                  <div className="mt-0.5 text-base font-semibold text-ink">
                     {job.company}
                   </div>
-                  <ul className="mt-3 flex flex-col gap-2">
-                    {(job.points || []).map((pt, j) => (
-                      <li
-                        key={j}
-                        className="flex gap-2.5 text-sm leading-relaxed text-ink/70"
-                      >
-                        <span
-                          aria-hidden
-                          className="mt-2 h-1 w-1 shrink-0 rounded-full bg-ink/30"
-                        />
-                        {pt}
-                      </li>
-                    ))}
-                  </ul>
+                  {job.points?.length > 0 && (
+                    <ul className="mt-4 flex flex-col gap-2.5">
+                      {job.points.map((pt, j) => (
+                        <li
+                          key={j}
+                          className="relative max-w-[72ch] pl-5 text-[15px] leading-[1.6] text-graphite"
+                        >
+                          <span
+                            aria-hidden
+                            className="absolute left-0 top-[9px] h-[7px] w-[7px] rounded-full bg-cyan"
+                          />
+                          {pt}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  {job.tech?.length > 0 && (
+                    <div className="mt-5">
+                      <TechChips items={job.tech} tone="techGhost" />
+                    </div>
+                  )}
                 </div>
-              </li>
+              </div>
             ))}
-          </ol>
-        </section>
+          </div>
+        </div>
+      </section>
 
-        <Separator />
-
-        {/* 04 — STACK */}
-        <section id="skills" className="py-20 md:py-28">
+      {/* ── SKILLS + EDUCATION (mist) ── */}
+      <section id="skills" className="bg-mist">
+        <div
+          className={`${COL} grid gap-12 py-20 md:grid-cols-[1.3fr_0.7fr] md:gap-[72px] md:py-[104px]`}
+        >
+          {/* Toolbox */}
           <div className="reveal">
-            <SectionLabel n="04" en="Stack" />
-            <div className="grid grid-cols-1 gap-x-10 gap-y-10 sm:grid-cols-2">
+            <Eyebrow tone="green">Toolbox</Eyebrow>
+            <h2 className="mt-5 font-display text-[32px] font-bold leading-[1.15] tracking-[-0.02em] text-navy md:text-[38px]">
+              {HEADINGS.skills}
+            </h2>
+            <div className="mt-10 flex flex-col gap-8">
               {skillGroups.map((group) => (
                 <div key={group.title}>
-                  <h3 className="font-display text-sm font-semibold text-ink">
+                  <div className="font-mono text-xs font-medium uppercase tracking-[0.12em] text-navy">
                     {group.title}
-                  </h3>
-                  <Separator className="my-3" />
-                  <div className="flex flex-wrap gap-2">
+                  </div>
+                  <div className="mt-3.5 flex flex-wrap gap-2.5">
                     {group.items.map((item) => (
-                      <Badge key={item}>{item}</Badge>
+                      <Badge key={item} variant="skill">
+                        {item}
+                      </Badge>
                     ))}
                   </div>
                 </div>
               ))}
             </div>
           </div>
-        </section>
 
-        <Separator />
-
-        {/* 05 — WORK */}
-        <section id="work" className="py-20 md:py-28">
+          {/* Education */}
           <div className="reveal">
-            <SectionLabel n="05" en="Work" />
+            <div className="font-mono text-xs font-medium uppercase tracking-[0.12em] text-navy">
+              Education
+            </div>
+            <div className="mt-3.5 flex flex-col gap-4">
+              {education.map((e, i) => (
+                <div
+                  key={i}
+                  className="rounded-[20px] border border-rule bg-white p-[26px]"
+                >
+                  <div className="font-mono text-[13px] text-graphite tabular-nums">
+                    {e.period}
+                  </div>
+                  <h4 className="mt-2 font-display text-[17px] font-bold leading-snug text-navy">
+                    {e.degree}
+                  </h4>
+                  <div className="mt-0.5 text-sm text-ink">{e.academy}</div>
+                  {e.note && (
+                    <p className="mt-2 text-[13px] leading-[1.5] text-graphite">
+                      {e.note}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="flex flex-col gap-5">
-            {projects.map((proj, i) => {
-              const href = proj.url || proj.repo;
-              const LinkIcon = proj.repo ? Github : ArrowUpRight;
-              return (
-              <Card
-                key={`${proj.title}-${i}`}
-                className="reveal group overflow-hidden transition-shadow hover:shadow-[var(--lift)]"
-              >
-                {proj.image && (
-                  <div className="overflow-hidden border-b border-rule bg-ink/5">
-                    <AspectRatio ratio={16 / 9}>
-                      <img
-                        src={proj.image}
-                        alt={proj.title}
-                        loading="lazy"
-                        className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
-                      />
-                    </AspectRatio>
-                  </div>
-                )}
-                <CardHeader className="pb-4">
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <div className="font-display text-xl font-semibold">
-                        {proj.title}
-                      </div>
-                      {proj.kicker && (
-                        <div className="mt-1 text-xs font-semibold uppercase tracking-[0.16em] text-indigo">
-                          {proj.kicker}
-                        </div>
-                      )}
-                    </div>
-                    {href && (
-                      <a
-                        href={href}
-                        target="_blank"
-                        rel="noreferrer"
-                        aria-label={`${proj.title} — ${
-                          proj.repo ? "GitHub repository" : "visit site"
-                        }`}
-                        className="rounded-md p-1.5 text-ink/50 transition-colors hover:bg-ink/5 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo"
-                      >
-                        <LinkIcon className="h-5 w-5" />
-                      </a>
-                    )}
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-base leading-relaxed text-ink/75">
-                    {proj.outcome}
-                  </p>
-                  <div className="mt-5 flex flex-wrap gap-2">
-                    {proj.tech.map((t) => (
-                      <Badge key={t} variant="outline">
-                        {t}
-                      </Badge>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-              );
-            })}
-          </div>
-        </section>
+        </div>
+      </section>
 
-        <Separator />
-
-        {/* 06 — CONTACT */}
-        <section id="contact" className="py-20 md:py-28">
-          <div className="reveal">
-            <SectionLabel n="06" en="Contact" />
-            <h2 className="max-w-xl font-display text-3xl font-bold leading-tight tracking-tight sm:text-4xl">
-              {contactHeadline}
-            </h2>
-            {contactSubtitle && (
-              <p className="mt-4 max-w-lg text-lg text-ink/65">
-                {contactSubtitle}
-              </p>
+      {/* ── CONTACT (navy) ── */}
+      <section
+        id="contact"
+        className="relative isolate overflow-hidden bg-navy text-white"
+      >
+        {showWatermark && (
+          <Watermark className="pointer-events-none absolute -top-10 left-0 w-[480px] max-w-[55%] opacity-[0.05]" />
+        )}
+        <div className={`${COL} py-24 md:py-[120px]`}>
+          <Eyebrow tone="cyan">Let’s talk</Eyebrow>
+          <h2 className="mt-5 max-w-[20ch] font-display text-[34px] font-bold leading-[1.1] tracking-[-0.025em] sm:text-[40px] md:text-[46px]">
+            {contact.headline}
+          </h2>
+          <p className="mt-5 max-w-[54ch] text-lg leading-[1.6] text-white/[0.78]">
+            {contact.subtitle || CONTACT_FALLBACK}
+          </p>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            {contact.email && (
+              <Button variant="onNavy" size="lg" asChild>
+                <a href={`mailto:${contact.email}`}>{contact.email}</a>
+              </Button>
             )}
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-              {socials.map((s, i) => {
-                const Icon = socialIcon(s);
-                const isMail = s.href.startsWith("mailto:");
-                const label = isMail ? s.href.replace("mailto:", "") : s.name;
+            {contact.phone && (
+              <Button variant="onNavyOutline" size="lg" asChild>
+                <a href={`tel:${contact.phone}`}>{formatPhone(contact.phone)}</a>
+              </Button>
+            )}
+          </div>
+
+          {socials.length > 0 && (
+            <div className="mt-14 flex flex-wrap gap-x-8 gap-y-3 border-t border-white/[0.16] pt-7">
+              {socials.map((s) => {
+                const isMail = (s.href || "").startsWith("mailto:");
                 return (
-                  <Button
+                  <a
                     key={s.href}
-                    variant={i === 0 ? "default" : "outline"}
-                    asChild
+                    href={s.href}
+                    {...(isMail
+                      ? {}
+                      : { target: "_blank", rel: "noopener noreferrer" })}
+                    className="font-mono text-sm text-white/70 transition-colors hover:text-white"
                   >
-                    <a
-                      href={s.href}
-                      {...(isMail
-                        ? {}
-                        : { target: "_blank", rel: "noreferrer" })}
-                    >
-                      <Icon /> {label}
-                      {!isMail && <ArrowUpRight />}
-                    </a>
-                  </Button>
+                    {s.name} ↗
+                  </a>
                 );
               })}
             </div>
-          </div>
-        </section>
+          )}
+        </div>
+      </section>
 
-        <Separator />
-        <footer className="py-8 text-xs text-ink/65">
-          Designed &amp; built by {name} · Bricolage Grotesque + IBM Plex Sans
-        </footer>
-      </main>
+      {/* ── FOOTER (ink) ── */}
+      <footer className="bg-ink text-white">
+        <div
+          className={`${COL} flex flex-col items-start justify-between gap-4 py-8 sm:flex-row sm:items-center`}
+        >
+          <div className="flex items-center gap-2.5">
+            <DotStack className="h-[22px] w-1.5" />
+            <span className="text-[15px] font-semibold">
+              {[name, role].filter(Boolean).join(" · ")}
+            </span>
+          </div>
+          <div className="font-mono text-xs text-white/50">
+            {[locationLine, "Crafted with the Cefalo design system"]
+              .filter(Boolean)
+              .join(" · ")}
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

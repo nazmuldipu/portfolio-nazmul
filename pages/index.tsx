@@ -34,6 +34,7 @@ export default function Home({ data }: { data: any }) {
         {/* SVG favicon — crisp at any size; ICO is the fallback for legacy browsers */}
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="preconnect" href="https://rsms.me" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
       </Head>
