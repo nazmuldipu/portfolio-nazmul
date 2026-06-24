@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
-import { Button } from "@/src/components/ui/button";
-import { Badge } from "@/src/components/ui/badge";
+import { Button } from "./button";
+import { Badge } from "./badge";
 import { AspectRatio } from "@/src/components/ui/aspect-ratio";
 
 // ── Layout constants ──────────────────────────────────────────────────────────
@@ -356,13 +356,13 @@ export default function Portfolio({
       { threshold: 0.12 }
     );
     document
-      .querySelectorAll(".portfolio-root .reveal")
+      .querySelectorAll(".tpl-emerald .reveal")
       .forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, []);
 
   return (
-    <div className="portfolio-root min-h-screen bg-paper">
+    <div className="tpl-emerald min-h-screen bg-paper">
       <Nav name={name} />
 
       {/* ── HERO (mint) ── */}

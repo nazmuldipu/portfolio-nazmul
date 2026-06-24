@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- emerald rounded-square badge -->
+  <rect width="64" height="64" rx="13" fill="#0C4034"/>
+  <!-- N: cream verticals (structure) + gold diagonal (the spark) -->
+  <line x1="16" y1="52" x2="16" y2="12" stroke="#FCFBF8" stroke-width="6.5" stroke-linecap="round"/>
+  <line x1="48" y1="12" x2="48" y2="52" stroke="#FCFBF8" stroke-width="6.5" stroke-linecap="round"/>
+  <line x1="16" y1="12" x2="48" y2="52" stroke="#E6A93A" stroke-width="6.5" stroke-linecap="round"/>
+</svg>

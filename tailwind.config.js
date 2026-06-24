@@ -15,16 +15,23 @@ module.exports = {
         accent: "#58C2C0",
         "text-primary": "#374151",
         "text-secondary": "#4b5563",
-        // Emerald + gold jewel palette. Var-backed channel triplets so opacity
-        // modifiers (text-ink/70, bg-white/12) resolve via <alpha-value>. Scoped
-        // to .portfolio-root in globals.css; never collide with the tokens above.
+        // Union of all portfolio templates' tokens. Var-backed channel triplets
+        // so opacity modifiers (text-ink/70, bg-white/12) resolve via
+        // <alpha-value>; each template sets the values under its own .tpl-<key>
+        // root in globals.css, so shared names (ink/paper/card/rule) never clash.
+        // Shared:
         ink: "rgb(var(--ink) / <alpha-value>)",
-        graphite: "rgb(var(--graphite) / <alpha-value>)",
         paper: "rgb(var(--paper) / <alpha-value>)",
         card: "rgb(var(--card) / <alpha-value>)",
+        rule: "rgb(var(--rule) / <alpha-value>)",
+        // classic:
+        marker: "rgb(var(--marker) / <alpha-value>)",
+        indigo: "rgb(var(--indigo) / <alpha-value>)",
+        "on-marker": "rgb(var(--on-marker) / <alpha-value>)",
+        // emerald:
+        graphite: "rgb(var(--graphite) / <alpha-value>)",
         mist: "rgb(var(--mist) / <alpha-value>)",
         mint: "rgb(var(--mint) / <alpha-value>)",
-        rule: "rgb(var(--rule) / <alpha-value>)",
         emerald: "rgb(var(--emerald) / <alpha-value>)",
         "emerald-90": "rgb(var(--emerald-90) / <alpha-value>)",
         "emerald-70": "rgb(var(--emerald-70) / <alpha-value>)",
