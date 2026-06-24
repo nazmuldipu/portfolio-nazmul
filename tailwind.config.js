@@ -15,7 +15,7 @@ module.exports = {
         accent: "#58C2C0",
         "text-primary": "#374151",
         "text-secondary": "#4b5563",
-        // Cefalo design-system palette. Var-backed channel triplets so opacity
+        // Emerald + gold jewel palette. Var-backed channel triplets so opacity
         // modifiers (text-ink/70, bg-white/12) resolve via <alpha-value>. Scoped
         // to .portfolio-root in globals.css; never collide with the tokens above.
         ink: "rgb(var(--ink) / <alpha-value>)",
@@ -23,15 +23,15 @@ module.exports = {
         paper: "rgb(var(--paper) / <alpha-value>)",
         card: "rgb(var(--card) / <alpha-value>)",
         mist: "rgb(var(--mist) / <alpha-value>)",
+        mint: "rgb(var(--mint) / <alpha-value>)",
         rule: "rgb(var(--rule) / <alpha-value>)",
-        navy: "rgb(var(--navy) / <alpha-value>)",
-        "navy-90": "rgb(var(--navy-90) / <alpha-value>)",
-        "navy-70": "rgb(var(--navy-70) / <alpha-value>)",
-        "navy-20": "rgb(var(--navy-20) / <alpha-value>)",
-        "navy-tint": "rgb(var(--navy-tint) / <alpha-value>)",
-        green: "rgb(var(--green) / <alpha-value>)",
-        cyan: "rgb(var(--cyan) / <alpha-value>)",
-        "cyan-90": "rgb(var(--cyan-90) / <alpha-value>)",
+        emerald: "rgb(var(--emerald) / <alpha-value>)",
+        "emerald-90": "rgb(var(--emerald-90) / <alpha-value>)",
+        "emerald-70": "rgb(var(--emerald-70) / <alpha-value>)",
+        "emerald-20": "rgb(var(--emerald-20) / <alpha-value>)",
+        "emerald-tint": "rgb(var(--emerald-tint) / <alpha-value>)",
+        gold: "rgb(var(--gold) / <alpha-value>)",
+        "gold-bright": "rgb(var(--gold-bright) / <alpha-value>)",
       },
       fontFamily: {
         primary: ["var(--font-primary)"],

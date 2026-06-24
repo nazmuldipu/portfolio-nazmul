@@ -123,7 +123,7 @@ export function mapPortfolio(raw: any, urlFor: UrlFor) {
 
   // --- Projects -------------------------------------------------------------
   // The work section has three shapes: one feature card (first project), a grid
-  // of standard cards, and a navy card grouping the static-site builds as link
+  // of standard cards, and an emerald card grouping the static-site builds as link
   // tiles. We detect the static-site cluster by name and pull each tile's label
   // out of its description ("…named X.") so it all stays Sanity-driven.
   const allProjects = (raw.projects || [])

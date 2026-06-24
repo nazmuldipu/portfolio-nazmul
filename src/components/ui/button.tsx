@@ -4,27 +4,28 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/src/lib/utils";
 
-// Themed to the Cefalo palette via CSS variables (--navy, --cyan, --rule, …) so
-// these primitives never collide with the existing site's Tailwind color tokens.
-// Pill CTAs follow the design's one-accent-per-surface rule: navy fill shifts to
-// cyan on hover (light surfaces); the `onNavy*` variants live on navy surfaces.
+// Themed to the emerald + gold palette via CSS variables (--emerald, --gold, …)
+// so these primitives never collide with the existing site's Tailwind color
+// tokens. One-spark-per-surface: on light, the primary CTA flips emerald → gold
+// on hover (the page's one bold interaction); `onEmerald*` variants live on the
+// emerald surfaces.
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-paper disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald focus-visible:ring-offset-2 focus-visible:ring-offset-paper disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
-        // Primary CTA on light surfaces: navy → cyan on hover.
-        navy: "bg-navy font-semibold text-white hover:bg-cyan",
-        // Filled CTA on navy surfaces: white → navy-tint on hover.
-        onNavy:
-          "bg-white font-semibold text-navy hover:bg-navy-tint",
-        // Ghost/outline CTA on navy surfaces.
-        onNavyOutline:
+        // Primary CTA on light surfaces: emerald → gold on hover.
+        emerald: "bg-emerald font-semibold text-white hover:bg-gold hover:text-emerald",
+        // Filled CTA on emerald surfaces: white → emerald-tint on hover.
+        onEmerald:
+          "bg-white font-semibold text-emerald hover:bg-emerald-tint",
+        // Ghost/outline CTA on emerald surfaces.
+        onEmeraldOutline:
           "border-[1.5px] border-white/40 bg-transparent font-semibold text-white hover:border-white hover:bg-white/[0.12]",
         outline:
-          "border border-rule bg-transparent text-ink hover:border-navy-20 hover:bg-navy-tint/60",
+          "border border-rule bg-transparent text-ink hover:border-emerald-20 hover:bg-emerald-tint/60",
         ghost: "text-ink hover:bg-ink/5",
-        link: "rounded-none text-cyan underline-offset-4 hover:underline",
+        link: "rounded-none text-emerald underline-offset-4 hover:underline",
       },
       size: {
         default: "h-11 px-5 py-2",
@@ -34,7 +35,7 @@ const buttonVariants = cva(
       },
     },
     defaultVariants: {
-      variant: "navy",
+      variant: "emerald",
       size: "default",
     },
   }

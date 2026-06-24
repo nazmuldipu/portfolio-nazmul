@@ -5,8 +5,8 @@ import { Badge } from "@/src/components/ui/badge";
 import { AspectRatio } from "@/src/components/ui/aspect-ratio";
 
 // ── Layout constants ──────────────────────────────────────────────────────────
-// Single 1180px content column, centered, 40px horizontal padding (per the
-// Cefalo handoff). Section vertical rhythm: ~104px light, ~120px navy.
+// Single 1180px content column, centered, 40px horizontal padding. Section
+// vertical rhythm: ~104px on the paper/mist surfaces, ~120px on the mint bookends.
 const COL = "mx-auto w-full max-w-[1180px] px-6 md:px-10";
 
 // In-page section nav (information architecture — the only hard-coded labels).
@@ -16,9 +16,8 @@ const NAV_LINKS = [
   { href: "#skills", label: "Skills" },
 ];
 
-// Editorial section headings from the design reference. These are layout copy
-// (like the section labels), not profile data — all substantive content below
-// is sourced from Sanity via the `data` prop.
+// Editorial section headings. These are layout copy (like the section labels),
+// not profile data — all substantive content below is sourced from Sanity.
 const HEADINGS = {
   about: "Hand me the feature your team is wary of.",
   work: "Things I’ve built and shipped.",
@@ -28,7 +27,7 @@ const HEADINGS = {
   skills: "What I work with.",
 };
 
-// The static-site builds are presented as one navy module grouping the live
+// The static-site builds are presented as one tinted module grouping the live
 // links; its framing copy is design-level, the tiles themselves come from Sanity.
 const SITES_CARD = {
   label: "2021 → 2022 · ELEVENTY",
@@ -46,57 +45,51 @@ const ABOUT_STATS = [
 const CONTACT_FALLBACK =
   "I take on freelance and consulting work. Tell me what you’re building and I’ll tell you how I’d approach it.";
 
-// ── Brand marks (Cefalo) ──────────────────────────────────────────────────────
-function DotStack({ className }) {
+// ── Brand mark ────────────────────────────────────────────────────────────────
+// Custom "N" monogram for Nazmul: two emerald verticals joined by a gold
+// diagonal — the letter literally drawn as the palette (emerald structure, the
+// one gold spark as its energy).
+function Monogram({ className }) {
   return (
     <svg
       className={className}
-      viewBox="-1 -1 8 26"
+      viewBox="0 0 32 32"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      aria-label="Cefalo dot mark"
+      aria-label="Nazmul Alam monogram"
     >
-      <circle cx="3" cy="3" r="3" fill="#57A11F" />
-      <circle cx="3" cy="12" r="3" fill="#00A9DC" />
-      <circle cx="3" cy="21" r="3" fill="#004081" />
+      <line x1="6" y1="26" x2="6" y2="6" stroke="#0C4034" strokeWidth="4" strokeLinecap="round" />
+      <line x1="26" y1="6" x2="26" y2="26" stroke="#0C4034" strokeWidth="4" strokeLinecap="round" />
+      <line x1="6" y1="6" x2="26" y2="26" stroke="#BC7F19" strokeWidth="4" strokeLinecap="round" />
     </svg>
   );
 }
 
-// Faint "iC" watermark used as decorative texture on the navy surfaces.
+// Faint monogram watermark, used as decorative texture. Inherits the current
+// text color so it can tint to emerald on the light surfaces.
 function Watermark({ className }) {
   return (
     <svg
       aria-hidden
       className={className}
-      viewBox="-16 -16 418 392"
+      viewBox="0 0 32 32"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <circle cx="45" cy="45" r="45" fill="#FFFFFF" />
-      <circle cx="45" cy="180" r="45" fill="#FFFFFF" />
-      <circle cx="45" cy="315" r="45" fill="#FFFFFF" />
-      <path
-        d="M369.429 345H219.429C186.292 345 159.429 318.137 159.429 285L159.429 75C159.429 41.8629 186.292 15 219.429 15H369.429"
-        stroke="#FFFFFF"
-        strokeWidth="30"
-        strokeLinecap="round"
-      />
+      <line x1="6" y1="26" x2="6" y2="6" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" />
+      <line x1="26" y1="6" x2="26" y2="26" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" />
+      <line x1="6" y1="6" x2="26" y2="26" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" />
     </svg>
   );
 }
 
 // ── Small presentational helpers ──────────────────────────────────────────────
-// Eyebrow: colored bar + mono uppercase label. Green on light, cyan on navy.
-function Eyebrow({ tone = "green", children }) {
-  const bar = tone === "cyan" ? "bg-cyan" : "bg-green";
-  const text = tone === "cyan" ? "text-white/70" : "text-graphite";
+// Eyebrow: gold bar + mono uppercase label, sitting on the light surfaces.
+function Eyebrow({ children }) {
   return (
     <div className="flex items-center gap-3">
-      <span aria-hidden className={`h-0.5 w-8 shrink-0 ${bar}`} />
-      <span
-        className={`font-mono text-[13px] font-medium uppercase tracking-[0.14em] ${text}`}
-      >
+      <span aria-hidden className="h-0.5 w-8 shrink-0 bg-gold" />
+      <span className="font-mono text-[13px] font-medium uppercase tracking-[0.14em] text-graphite">
         {children}
       </span>
     </div>
@@ -125,14 +118,15 @@ function TechChips({ items, tone = "tech" }) {
   );
 }
 
-// Cyan live-link with an arrow that nudges right on hover.
+// Live-link with an arrow that nudges right on hover. Emerald on light surfaces,
+// warming to gold on hover.
 function LiveLink({ href, children }) {
   return (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="group/link mt-5 inline-flex items-center gap-1.5 font-semibold text-cyan transition-colors hover:text-cyan-90"
+      className="group/link mt-5 inline-flex items-center gap-1.5 font-semibold text-emerald transition-colors hover:text-gold"
     >
       {children}
       <span className="transition-transform duration-200 group-hover/link:translate-x-1">
@@ -146,11 +140,11 @@ function LiveLink({ href, children }) {
 function Nav({ name }) {
   const [open, setOpen] = useState(false);
   return (
-    <header className="sticky top-0 z-50 h-[72px] border-b border-rule bg-white/[0.86] backdrop-blur-[12px] backdrop-saturate-150">
+    <header className="sticky top-0 z-50 h-[72px] border-b border-rule bg-paper/80 backdrop-blur-[12px] backdrop-saturate-150">
       <div className={`${COL} flex h-full items-center justify-between`}>
         <a href="#top" className="flex items-center gap-2.5">
-          <DotStack className="h-6 w-1.5" />
-          <span className="text-[17px] font-bold tracking-[-0.01em] text-navy">
+          <Monogram className="h-7 w-7" />
+          <span className="text-[17px] font-bold tracking-[-0.01em] text-emerald">
             {name}
           </span>
         </a>
@@ -161,7 +155,7 @@ function Nav({ name }) {
               <a
                 key={l.href}
                 href={l.href}
-                className="text-[15px] font-medium text-ink transition-colors hover:text-cyan"
+                className="text-[15px] font-medium text-ink transition-colors hover:text-gold"
               >
                 {l.label}
               </a>
@@ -175,7 +169,7 @@ function Nav({ name }) {
             aria-label="Toggle menu"
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
-            className="flex h-9 w-9 items-center justify-center rounded-md text-navy md:hidden"
+            className="flex h-9 w-9 items-center justify-center rounded-md text-emerald md:hidden"
           >
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
               <path
@@ -191,14 +185,14 @@ function Nav({ name }) {
 
       {/* Mobile menu */}
       {open && (
-        <div className="border-b border-rule bg-white/95 backdrop-blur-[12px] md:hidden">
+        <div className="border-b border-rule bg-paper/95 backdrop-blur-[12px] md:hidden">
           <div className={`${COL} flex flex-col gap-1 py-3`}>
             {NAV_LINKS.map((l) => (
               <a
                 key={l.href}
                 href={l.href}
                 onClick={() => setOpen(false)}
-                className="rounded-md py-2 text-[15px] font-medium text-ink hover:text-cyan"
+                className="rounded-md py-2 text-[15px] font-medium text-ink hover:text-gold"
               >
                 {l.label}
               </a>
@@ -211,9 +205,14 @@ function Nav({ name }) {
 }
 
 // ── Project cards ─────────────────────────────────────────────────────────────
+const CARD_HOVER =
+  "transition-[border-color,box-shadow] duration-200 hover:border-emerald-20 hover:shadow-[0_14px_40px_rgba(12,64,52,0.12)]";
+
 function FeatureCard({ project }) {
   return (
-    <article className="reveal group grid overflow-hidden rounded-[24px] border border-rule bg-white transition-[border-color,box-shadow] duration-200 hover:border-navy-20 hover:shadow-[0_14px_40px_rgba(0,64,129,0.08)] md:grid-cols-[1.05fr_0.95fr]">
+    <article
+      className={`reveal group grid overflow-hidden rounded-[24px] border border-rule bg-card ${CARD_HOVER} md:grid-cols-[1.05fr_0.95fr]`}
+    >
       {project.image && (
         <div className="overflow-hidden bg-mist">
           <AspectRatio ratio={1}>
@@ -226,10 +225,10 @@ function FeatureCard({ project }) {
         </div>
       )}
       <div className="flex flex-col p-8 md:p-10">
-        <div className="font-mono text-xs font-medium uppercase tracking-[0.1em] text-green">
+        <div className="font-mono text-xs font-medium uppercase tracking-[0.1em] text-gold">
           {project.label}
         </div>
-        <h3 className="mt-3 font-display text-[26px] font-bold leading-tight tracking-[-0.01em] text-navy md:text-[30px]">
+        <h3 className="mt-3 font-display text-[26px] font-bold leading-tight tracking-[-0.01em] text-emerald md:text-[30px]">
           {project.title}
         </h3>
         <p className="mt-3 max-w-[52ch] text-[15px] leading-[1.6] text-graphite md:text-base">
@@ -248,7 +247,9 @@ function FeatureCard({ project }) {
 
 function ProjectCard({ project }) {
   return (
-    <article className="reveal group flex flex-col overflow-hidden rounded-[24px] border border-rule bg-white transition-[border-color,box-shadow] duration-200 hover:border-navy-20 hover:shadow-[0_14px_40px_rgba(0,64,129,0.08)]">
+    <article
+      className={`reveal group flex flex-col overflow-hidden rounded-[24px] border border-rule bg-card ${CARD_HOVER}`}
+    >
       {project.image && (
         <div className="overflow-hidden border-b border-rule bg-mist">
           <AspectRatio ratio={16 / 10}>
@@ -265,7 +266,7 @@ function ProjectCard({ project }) {
         <div className="font-mono text-xs font-medium uppercase tracking-[0.1em] text-graphite">
           {project.label}
         </div>
-        <h3 className="mt-2.5 font-display text-[23px] font-bold leading-tight tracking-[-0.01em] text-navy">
+        <h3 className="mt-2.5 font-display text-[23px] font-bold leading-tight tracking-[-0.01em] text-emerald">
           {project.title}
         </h3>
         <p className="mt-2.5 text-[15px] leading-[1.6] text-graphite">
@@ -282,15 +283,15 @@ function ProjectCard({ project }) {
 
 function SitesCard({ links }) {
   return (
-    <article className="reveal grid gap-8 overflow-hidden rounded-[24px] bg-navy p-8 text-white md:grid-cols-[0.8fr_1.2fr] md:p-10">
+    <article className="reveal grid gap-8 overflow-hidden rounded-[24px] border border-emerald-20 bg-emerald-tint p-8 md:grid-cols-[0.8fr_1.2fr] md:p-10">
       <div>
-        <div className="font-mono text-xs font-medium uppercase tracking-[0.1em] text-cyan">
+        <div className="font-mono text-xs font-medium uppercase tracking-[0.1em] text-gold">
           {SITES_CARD.label}
         </div>
-        <h3 className="mt-3 font-display text-[26px] font-bold leading-tight tracking-[-0.01em] md:text-[30px]">
+        <h3 className="mt-3 font-display text-[26px] font-bold leading-tight tracking-[-0.01em] text-emerald md:text-[30px]">
           {SITES_CARD.title}
         </h3>
-        <p className="mt-3 max-w-[40ch] text-[15px] leading-[1.6] text-white/75">
+        <p className="mt-3 max-w-[40ch] text-[15px] leading-[1.6] text-graphite">
           {SITES_CARD.description}
         </p>
       </div>
@@ -301,10 +302,10 @@ function SitesCard({ links }) {
             href={t.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="group/tile flex items-center justify-between gap-3 rounded-[14px] border border-white/[0.18] px-4 py-3.5 transition-colors hover:bg-white/[0.08]"
+            className="group/tile flex items-center justify-between gap-3 rounded-[14px] border border-emerald-20 bg-card px-4 py-3.5 transition-colors hover:border-emerald hover:bg-emerald-tint"
           >
-            <span className="text-[15px] font-medium">{t.label}</span>
-            <span className="text-cyan transition-transform duration-200 group-hover/tile:translate-x-1">
+            <span className="text-[15px] font-medium text-emerald">{t.label}</span>
+            <span className="text-gold transition-transform duration-200 group-hover/tile:translate-x-1">
               →
             </span>
           </a>
@@ -364,45 +365,45 @@ export default function Portfolio({
     <div className="portfolio-root min-h-screen bg-paper">
       <Nav name={name} />
 
-      {/* ── HERO (navy) ── */}
+      {/* ── HERO (mint) ── */}
       <section
         id="top"
-        className="relative isolate overflow-hidden bg-navy text-white"
+        className="relative isolate overflow-hidden bg-mint"
       >
         {showWatermark && (
-          <Watermark className="pointer-events-none absolute -bottom-10 right-0 w-[560px] max-w-[60%] opacity-[0.06]" />
+          <Watermark className="pointer-events-none absolute -bottom-16 right-4 w-[520px] max-w-[55%] text-emerald opacity-[0.06]" />
         )}
         <div
           className={`${COL} grid items-center gap-12 py-24 md:grid-cols-[1.15fr_0.85fr] md:gap-[72px] md:py-[120px]`}
         >
           <div>
-            <Eyebrow tone="cyan">
+            <Eyebrow>
               {[role, locationLine].filter(Boolean).join(" · ")}
             </Eyebrow>
-            <h1 className="mt-6 max-w-[14ch] font-display text-[40px] font-bold leading-[1.05] tracking-[-0.025em] sm:text-[52px] md:text-[60px]">
+            <h1 className="mt-6 max-w-[14ch] font-display text-[40px] font-bold leading-[1.05] tracking-[-0.025em] text-emerald sm:text-[52px] md:text-[60px]">
               {headline}
             </h1>
-            <p className="mt-7 max-w-[54ch] text-[17px] leading-[1.6] text-white/[0.78] md:text-[19px]">
+            <p className="mt-7 max-w-[54ch] text-[17px] leading-[1.6] text-ink/80 md:text-[19px]">
               {intro}
             </p>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-              <Button variant="onNavy" size="lg" asChild>
+              <Button variant="emerald" size="lg" asChild>
                 <a href="#contact">Start a project</a>
               </Button>
-              <Button variant="onNavyOutline" size="lg" asChild>
+              <Button variant="outline" size="lg" asChild>
                 <a href="#work">See selected work</a>
               </Button>
             </div>
-            <div className="mt-9 inline-flex items-center gap-2.5 rounded-full border border-white/20 px-4 py-2">
-              <span className="h-2 w-2 rounded-full bg-green ring-4 ring-green/25" />
-              <span className="font-mono text-[13px] text-white/80">
+            <div className="mt-9 inline-flex items-center gap-2.5 rounded-full border border-emerald-20 bg-card/60 px-4 py-2">
+              <span className="h-2 w-2 rounded-full bg-gold ring-4 ring-gold/25" />
+              <span className="font-mono text-[13px] text-graphite">
                 Available for freelance &amp; consulting
               </span>
             </div>
           </div>
 
           {portraitUrl && (
-            <div className="overflow-hidden rounded-[20px] bg-white/5">
+            <div className="overflow-hidden rounded-[20px] bg-emerald/5 ring-1 ring-emerald-20">
               <AspectRatio ratio={4 / 5}>
                 <img
                   src={portraitUrl}
@@ -416,13 +417,13 @@ export default function Portfolio({
       </section>
 
       {/* ── ABOUT (paper) ── */}
-      <section id="about" className="bg-paper">
+      <section id="about" className="border-t border-rule bg-paper">
         <div
           className={`${COL} grid gap-12 py-20 md:grid-cols-[0.9fr_1.1fr] md:gap-[72px] md:py-[104px]`}
         >
           <div className="reveal">
-            <Eyebrow tone="green">About</Eyebrow>
-            <h2 className="mt-5 max-w-[16ch] font-display text-[32px] font-bold leading-[1.15] tracking-[-0.02em] text-navy md:text-[38px]">
+            <Eyebrow>About</Eyebrow>
+            <h2 className="mt-5 max-w-[16ch] font-display text-[32px] font-bold leading-[1.15] tracking-[-0.02em] text-emerald md:text-[38px]">
               {HEADINGS.about}
             </h2>
           </div>
@@ -434,7 +435,7 @@ export default function Portfolio({
               <dl className="mt-12 grid grid-cols-1 gap-8 border-t border-rule pt-10 sm:grid-cols-3">
                 {ABOUT_STATS.map((s) => (
                   <div key={s.c}>
-                    <dt className="font-mono text-[40px] font-bold leading-none text-navy tabular-nums">
+                    <dt className="font-mono text-[40px] font-bold leading-none text-gold tabular-nums">
                       {s.n}
                     </dt>
                     <dd className="mt-3 text-sm leading-[1.5] text-graphite">
@@ -449,12 +450,12 @@ export default function Portfolio({
       </section>
 
       {/* ── SELECTED WORK (mist) ── */}
-      <section id="work" className="bg-mist">
+      <section id="work" className="border-t border-rule bg-mist">
         <div className={`${COL} py-20 md:py-[104px]`}>
           <div className="reveal flex flex-wrap items-end justify-between gap-6">
             <div>
-              <Eyebrow tone="green">Selected work</Eyebrow>
-              <h2 className="mt-5 font-display text-[32px] font-bold leading-[1.15] tracking-[-0.02em] text-navy md:text-[38px]">
+              <Eyebrow>Selected work</Eyebrow>
+              <h2 className="mt-5 font-display text-[32px] font-bold leading-[1.15] tracking-[-0.02em] text-emerald md:text-[38px]">
                 {HEADINGS.work}
               </h2>
             </div>
@@ -478,11 +479,11 @@ export default function Portfolio({
       </section>
 
       {/* ── EXPERIENCE (paper) ── */}
-      <section id="experience" className="bg-paper">
+      <section id="experience" className="border-t border-rule bg-paper">
         <div className={`${COL} py-20 md:py-[104px]`}>
           <div className="reveal">
-            <Eyebrow tone="green">Experience</Eyebrow>
-            <h2 className="mt-5 font-display text-[32px] font-bold leading-[1.15] tracking-[-0.02em] text-navy md:text-[38px]">
+            <Eyebrow>Experience</Eyebrow>
+            <h2 className="mt-5 font-display text-[32px] font-bold leading-[1.15] tracking-[-0.02em] text-emerald md:text-[38px]">
               {HEADINGS.experience}
             </h2>
           </div>
@@ -498,13 +499,13 @@ export default function Portfolio({
                     {job.period}
                   </div>
                   {job.location && (
-                    <div className="mt-1 text-sm text-navy-70">
+                    <div className="mt-1 text-sm text-emerald-70">
                       {job.location}
                     </div>
                   )}
                 </div>
                 <div>
-                  <h3 className="font-display text-[22px] font-bold leading-tight tracking-[-0.01em] text-navy">
+                  <h3 className="font-display text-[22px] font-bold leading-tight tracking-[-0.01em] text-emerald">
                     {job.role}
                   </h3>
                   <div className="mt-0.5 text-base font-semibold text-ink">
@@ -519,7 +520,7 @@ export default function Portfolio({
                         >
                           <span
                             aria-hidden
-                            className="absolute left-0 top-[9px] h-[7px] w-[7px] rounded-full bg-cyan"
+                            className="absolute left-0 top-[9px] h-[7px] w-[7px] rounded-full bg-gold"
                           />
                           {pt}
                         </li>
@@ -539,20 +540,20 @@ export default function Portfolio({
       </section>
 
       {/* ── SKILLS + EDUCATION (mist) ── */}
-      <section id="skills" className="bg-mist">
+      <section id="skills" className="border-t border-rule bg-mist">
         <div
           className={`${COL} grid gap-12 py-20 md:grid-cols-[1.3fr_0.7fr] md:gap-[72px] md:py-[104px]`}
         >
           {/* Toolbox */}
           <div className="reveal">
-            <Eyebrow tone="green">Toolbox</Eyebrow>
-            <h2 className="mt-5 font-display text-[32px] font-bold leading-[1.15] tracking-[-0.02em] text-navy md:text-[38px]">
+            <Eyebrow>Toolbox</Eyebrow>
+            <h2 className="mt-5 font-display text-[32px] font-bold leading-[1.15] tracking-[-0.02em] text-emerald md:text-[38px]">
               {HEADINGS.skills}
             </h2>
             <div className="mt-10 flex flex-col gap-8">
               {skillGroups.map((group) => (
                 <div key={group.title}>
-                  <div className="font-mono text-xs font-medium uppercase tracking-[0.12em] text-navy">
+                  <div className="font-mono text-xs font-medium uppercase tracking-[0.12em] text-emerald">
                     {group.title}
                   </div>
                   <div className="mt-3.5 flex flex-wrap gap-2.5">
@@ -569,19 +570,19 @@ export default function Portfolio({
 
           {/* Education */}
           <div className="reveal">
-            <div className="font-mono text-xs font-medium uppercase tracking-[0.12em] text-navy">
+            <div className="font-mono text-xs font-medium uppercase tracking-[0.12em] text-emerald">
               Education
             </div>
             <div className="mt-3.5 flex flex-col gap-4">
               {education.map((e, i) => (
                 <div
                   key={i}
-                  className="rounded-[20px] border border-rule bg-white p-[26px]"
+                  className="rounded-[20px] border border-rule bg-card p-[26px]"
                 >
                   <div className="font-mono text-[13px] text-graphite tabular-nums">
                     {e.period}
                   </div>
-                  <h4 className="mt-2 font-display text-[17px] font-bold leading-snug text-navy">
+                  <h4 className="mt-2 font-display text-[17px] font-bold leading-snug text-emerald">
                     {e.degree}
                   </h4>
                   <div className="mt-0.5 text-sm text-ink">{e.academy}</div>
@@ -597,37 +598,37 @@ export default function Portfolio({
         </div>
       </section>
 
-      {/* ── CONTACT (navy) ── */}
+      {/* ── CONTACT (mint) ── */}
       <section
         id="contact"
-        className="relative isolate overflow-hidden bg-navy text-white"
+        className="relative isolate overflow-hidden border-t border-rule bg-mint"
       >
         {showWatermark && (
-          <Watermark className="pointer-events-none absolute -top-10 left-0 w-[480px] max-w-[55%] opacity-[0.05]" />
+          <Watermark className="pointer-events-none absolute -top-12 left-2 w-[440px] max-w-[50%] text-emerald opacity-[0.06]" />
         )}
         <div className={`${COL} py-24 md:py-[120px]`}>
-          <Eyebrow tone="cyan">Let’s talk</Eyebrow>
-          <h2 className="mt-5 max-w-[20ch] font-display text-[34px] font-bold leading-[1.1] tracking-[-0.025em] sm:text-[40px] md:text-[46px]">
+          <Eyebrow>Let’s talk</Eyebrow>
+          <h2 className="mt-5 max-w-[20ch] font-display text-[34px] font-bold leading-[1.1] tracking-[-0.025em] text-emerald sm:text-[40px] md:text-[46px]">
             {contact.headline}
           </h2>
-          <p className="mt-5 max-w-[54ch] text-lg leading-[1.6] text-white/[0.78]">
+          <p className="mt-5 max-w-[54ch] text-lg leading-[1.6] text-ink/75">
             {contact.subtitle || CONTACT_FALLBACK}
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             {contact.email && (
-              <Button variant="onNavy" size="lg" asChild>
+              <Button variant="emerald" size="lg" asChild>
                 <a href={`mailto:${contact.email}`}>{contact.email}</a>
               </Button>
             )}
             {contact.phone && (
-              <Button variant="onNavyOutline" size="lg" asChild>
+              <Button variant="outline" size="lg" asChild>
                 <a href={`tel:${contact.phone}`}>{formatPhone(contact.phone)}</a>
               </Button>
             )}
           </div>
 
           {socials.length > 0 && (
-            <div className="mt-14 flex flex-wrap gap-x-8 gap-y-3 border-t border-white/[0.16] pt-7">
+            <div className="mt-14 flex flex-wrap gap-x-8 gap-y-3 border-t border-emerald-20 pt-7">
               {socials.map((s) => {
                 const isMail = (s.href || "").startsWith("mailto:");
                 return (
@@ -637,7 +638,7 @@ export default function Portfolio({
                     {...(isMail
                       ? {}
                       : { target: "_blank", rel: "noopener noreferrer" })}
-                    className="font-mono text-sm text-white/70 transition-colors hover:text-white"
+                    className="font-mono text-sm text-emerald transition-colors hover:text-gold"
                   >
                     {s.name} ↗
                   </a>
@@ -648,19 +649,19 @@ export default function Portfolio({
         </div>
       </section>
 
-      {/* ── FOOTER (ink) ── */}
-      <footer className="bg-ink text-white">
+      {/* ── FOOTER (paper) ── */}
+      <footer className="border-t border-rule bg-paper">
         <div
           className={`${COL} flex flex-col items-start justify-between gap-4 py-8 sm:flex-row sm:items-center`}
         >
           <div className="flex items-center gap-2.5">
-            <DotStack className="h-[22px] w-1.5" />
-            <span className="text-[15px] font-semibold">
+            <Monogram className="h-6 w-6" />
+            <span className="text-[15px] font-semibold text-emerald">
               {[name, role].filter(Boolean).join(" · ")}
             </span>
           </div>
-          <div className="font-mono text-xs text-white/50">
-            {[locationLine, "Crafted with the Cefalo design system"]
+          <div className="font-mono text-xs text-graphite">
+            {[locationLine, "Crafted with Next.js & Sanity"]
               .filter(Boolean)
               .join(" · ")}
           </div>

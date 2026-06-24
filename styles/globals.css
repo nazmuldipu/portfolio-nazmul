@@ -8,25 +8,26 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ── Cefalo tokens, scoped to the portfolio so they never touch the rest of the
-   Sanity site. Values are space-separated RGB channels so Tailwind tokens can
-   apply opacity, e.g. text-ink/70 → rgb(var(--ink) / 0.7). This is a fixed
-   light + navy design (no dark-mode swap) — the navy surfaces are always navy. ── */
+/* ── Emerald + gold jewel palette, scoped to the portfolio so it never touches
+   the rest of the Sanity site. Values are space-separated RGB channels so
+   Tailwind tokens can apply opacity, e.g. text-ink/70 → rgb(var(--ink) / 0.7).
+   Fixed light + emerald design (no dark-mode swap) — emerald is the signature
+   structural color; gold is the one spark accent on top of warm neutrals. ── */
 .portfolio-root {
-  --navy: 0 64 129;        /* #004081 — dominant primary */
-  --navy-90: 26 83 148;    /* #1A5394 */
-  --navy-70: 77 122 170;   /* #4D7AAA */
-  --navy-20: 204 217 230;  /* #CCD9E6 */
-  --navy-tint: 230 238 245;/* #E6EEF5 */
-  --green: 87 161 31;      /* #57A11F — accent / positive */
-  --cyan: 0 169 220;       /* #00A9DC — accent / action / links */
-  --cyan-90: 26 179 223;   /* #1AB3DF */
-  --ink: 10 10 10;         /* #0A0A0A — body text on light */
-  --graphite: 74 74 74;    /* #4A4A4A — secondary text, captions */
-  --mist: 244 246 248;     /* #F4F6F8 — alt surface */
-  --paper: 255 255 255;    /* #FFFFFF — default canvas */
-  --card: 255 255 255;
-  --rule: 224 228 232;     /* #E0E4E8 — hairline borders, dividers */
+  --emerald: 12 64 52;        /* #0C4034 — signature jewel; carries the dark surfaces */
+  --emerald-90: 19 78 64;     /* #134E40 — subtle hover/step on emerald */
+  --emerald-70: 62 107 95;    /* #3E6B5F — muted emerald for secondary labels */
+  --emerald-20: 194 214 207;  /* #C2D6CF — chip borders, card hover edge */
+  --emerald-tint: 231 240 236;/* #E7F0EC — chip fill, soft hover wash */
+  --gold: 188 127 25;         /* #BC7F19 — the single spark: bars, numbers, dots */
+  --gold-bright: 230 169 58;  /* #E6A93A — luminous gold for accents on dark surfaces */
+  --ink: 22 32 29;            /* #16201D — body text + darkest surface (footer) */
+  --graphite: 85 99 93;       /* #55635D — sage-gray secondary text */
+  --mist: 243 239 230;        /* #F3EFE6 — warm alt surface */
+  --mint: 221 235 228;        /* #DDEBE4 — soft cool emerald surface; the light hero/contact bookends */
+  --paper: 252 251 248;       /* #FCFBF8 — warm canvas */
+  --card: 255 255 255;        /* #FFFFFF — pure-white cards lift off warm paper */
+  --rule: 230 225 213;        /* #E6E1D5 — warm hairline borders, dividers */
 
   --font-display: "InterVariable", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-body: "InterVariable", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
