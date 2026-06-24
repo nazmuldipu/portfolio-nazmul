@@ -3,8 +3,8 @@ import { ArrowDown, ArrowUpRight, Download, Mail } from "lucide-react";
 // lucide-react dropped brand icons; react-icons (Feather set) matches its style.
 import { FiGithub as Github, FiLinkedin as Linkedin } from "react-icons/fi";
 
-import { Button } from "@/src/components/ui/button";
-import { Badge } from "@/src/components/ui/badge";
+import { Button } from "./button";
+import { Badge } from "./badge";
 import {
   Card,
   CardContent,
@@ -211,7 +211,7 @@ export default function Portfolio({ data }) {
       { threshold: 0.12 }
     );
     document
-      .querySelectorAll(".portfolio-root .reveal")
+      .querySelectorAll(".tpl-classic .reveal")
       .forEach((el) => revealObserver.observe(el));
 
     return () => {
@@ -221,7 +221,7 @@ export default function Portfolio({ data }) {
   }, []);
 
   return (
-    <div className="portfolio-root min-h-screen">
+    <div className="tpl-classic min-h-screen">
       <SyllabusRail active={active} name={name} />
 
       <main className="mx-auto max-w-3xl px-6 sm:px-8 lg:ml-56 lg:max-w-3xl lg:px-16 xl:ml-72">

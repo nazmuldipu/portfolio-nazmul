@@ -1,19 +1,26 @@
 import Head from "next/head";
 import imageUrlBuilder from "@sanity/image-url";
-import Portfolio from "@/src/components/Portfolio";
 import { client } from "@/src/sanity/lib/client";
 import { getPortfolioPage } from "@/src/sanity/lib/queries";
-import { mapPortfolio } from "@/src/utils/portfolioPage";
+import { resolveTemplate, DEFAULT_TEMPLATE } from "@/src/templates";
 
 const builder = imageUrlBuilder(client);
 const urlFor = (source: any, width: number, height: number) =>
   source ? builder.image(source).width(width).height(height).fit("crop").auto("format").url() : null;
 
+// Which portfolio template to render. NEXT_PUBLIC_* is inlined at build time, so
+// the choice is fixed per build — set NEXT_PUBLIC_PORTFOLIO_TEMPLATE to switch
+// (e.g. "emerald" or "classic"); unset falls back to DEFAULT_TEMPLATE.
+const template = resolveTemplate(
+  process.env.NEXT_PUBLIC_PORTFOLIO_TEMPLATE || DEFAULT_TEMPLATE
+);
+
 export async function getStaticProps() {
   let data = null;
   try {
     const raw = await getPortfolioPage();
-    data = mapPortfolio(raw, urlFor);
+    // Each template ships its own mapper, since their UI data shapes differ.
+    data = template.mapPortfolio(raw, urlFor);
   } catch (e) {
     // Leave data null — the component renders empty rather than stand-in copy.
     data = null;
@@ -22,6 +29,7 @@ export async function getStaticProps() {
 }
 
 export default function Home({ data }: { data: any }) {
+  const Template = template.Component;
   return (
     <>
       <Head>
@@ -32,12 +40,13 @@ export default function Home({ data }: { data: any }) {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         {/* SVG favicon — crisp at any size; ICO is the fallback for legacy browsers */}
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="icon" type="image/svg+xml" href={template.favicon} />
         <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="preconnect" href="https://rsms.me" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
       </Head>
-      <Portfolio data={data} />
+      <Template data={data} />
     </>
   );
 }

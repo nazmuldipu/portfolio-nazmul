@@ -1,25 +1,35 @@
-/* Step 1 portfolio pairing: Bricolage Grotesque (display) + IBM Plex Sans (body),
-   with IBM Plex Sans Bengali to render the bilingual section labels natively. */
+/* Fonts for both templates. @import only declares @font-face; the actual font
+   files download lazily, so the inactive template's families cost nothing. */
+/* classic: Bricolage Grotesque + IBM Plex Sans (+ Bengali) */
 @import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Bengali:wght@400;500&display=swap");
+/* emerald: Inter (rsms variable) + JetBrains Mono */
+@import url("https://rsms.me/inter/inter.css");
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap");
 @import "./variables.css";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ── Step 1 design tokens (scoped so they never touch the existing Sanity site).
-   Values are space-separated RGB channels so Tailwind tokens can apply opacity
-   (rgb(var(--ink) / <alpha-value>)). Dark mode swaps these six lines — every
-   color on the page is token-derived, so nothing else has to change. ── */
-.portfolio-root {
-  --paper: 246 247 249; /* cool near-white background */
-  --card: 255 255 255; /* surfaces */
-  --ink: 23 28 38; /* primary text */
-  --rule: 219 224 231; /* hairlines, borders, the syllabus rail */
-  --marker: 255 210 63; /* highlighter accent — used only behind key words */
-  --indigo: 59 76 202; /* structural accent — links, focus, active rail */
-  --on-marker: 23 28 38; /* fixed dark text on the always-yellow highlight */
-  --lift: 0 1px 24px -12px rgb(23 28 38 / 0.35); /* card hover shadow */
+/* ============================================================================
+   Each template scopes its design tokens under a root class (.tpl-<key>) so the
+   shared, var-backed Tailwind colors (rgb(var(--ink) / <alpha>) …) resolve to
+   whichever template wraps the page. Only the active root class renders, so the
+   templates never collide. Add a new template by adding a `.tpl-<key>` block.
+   ============================================================================ */
+
+/* ── CLASSIC ─────────────────────────────────────────────────────────────────
+   The original design: indigo + marker accents, Bricolage Grotesque, dark-mode
+   swap, numbered syllabus rail. ── */
+.tpl-classic {
+  --paper: 246 247 249;
+  --card: 255 255 255;
+  --ink: 23 28 38;
+  --rule: 219 224 231;
+  --marker: 255 210 63;
+  --indigo: 59 76 202;
+  --on-marker: 23 28 38;
+  --lift: 0 1px 24px -12px rgb(23 28 38 / 0.35);
 
   --font-display: "Bricolage Grotesque", "Georgia", serif;
   --font-body: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, sans-serif;
@@ -31,10 +41,9 @@
   -webkit-font-smoothing: antialiased;
 }
 
-/* Dark mode: re-theme by swapping the same six tokens. Marker stays yellow
-   (its text uses the fixed --on-marker), indigo lightens for contrast. */
+/* Dark mode (classic only): re-theme by swapping the same tokens. */
 @media (prefers-color-scheme: dark) {
-  .portfolio-root {
+  .tpl-classic {
     --paper: 14 17 22;
     --card: 22 27 34;
     --ink: 230 233 238;
@@ -46,44 +55,36 @@
   }
 }
 
-.portfolio-root .font-display {
+.tpl-classic .font-display {
   font-family: var(--font-display);
 }
-.portfolio-root .font-bengali {
+.tpl-classic .font-bengali {
   font-family: var(--font-bengali);
 }
 
-/* The single orchestrated motion: section content rises + fades in on scroll. */
-.portfolio-root .reveal {
+.tpl-classic .reveal {
   opacity: 0;
   transform: translateY(18px);
   transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
     transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: opacity, transform;
 }
-.portfolio-root .reveal.is-visible {
+.tpl-classic .reveal.is-visible {
   opacity: 1;
   transform: none;
 }
 
-/* Hero atmosphere: two soft, palette-tinted glows that drift slowly behind the
-   thesis. Kept low-opacity and blurred so the marker accent stays the loud one. */
-.portfolio-root .hero-glow {
+.tpl-classic .hero-glow {
   position: absolute;
   inset: 0 -8% 0 -8%;
   z-index: -1;
   pointer-events: none;
-  background:
-    radial-gradient(
+  background: radial-gradient(
       46% 46% at 18% 42%,
       rgb(var(--indigo) / 0.24),
       transparent 70%
     ),
-    radial-gradient(
-      42% 46% at 78% 56%,
-      rgb(var(--marker) / 0.3),
-      transparent 70%
-    );
+    radial-gradient(42% 46% at 78% 56%, rgb(var(--marker) / 0.3), transparent 70%);
   filter: blur(60px);
   opacity: 0.75;
   animation: hero-drift 22s ease-in-out infinite alternate;
@@ -99,14 +100,84 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .portfolio-root .reveal {
+  .tpl-classic .reveal {
     opacity: 1;
     transform: none;
     transition: none;
   }
-  .portfolio-root .hero-glow {
+  .tpl-classic .hero-glow {
     animation: none;
   }
+}
+
+/* ── EMERALD ─────────────────────────────────────────────────────────────────
+   Light emerald + gold jewel identity over warm neutrals; Inter + JetBrains
+   Mono; the "N" monogram. No dark-mode swap — surfaces are intentionally light. ── */
+.tpl-emerald {
+  --emerald: 12 64 52;        /* #0C4034 — signature jewel */
+  --emerald-90: 19 78 64;     /* #134E40 */
+  --emerald-70: 62 107 95;    /* #3E6B5F */
+  --emerald-20: 194 214 207;  /* #C2D6CF */
+  --emerald-tint: 231 240 236;/* #E7F0EC */
+  --gold: 188 127 25;         /* #BC7F19 — the single spark */
+  --gold-bright: 230 169 58;  /* #E6A93A */
+  --ink: 22 32 29;            /* #16201D */
+  --graphite: 85 99 93;       /* #55635D */
+  --mist: 243 239 230;        /* #F3EFE6 — warm alt surface */
+  --mint: 221 235 228;        /* #DDEBE4 — soft mint hero/contact bookends */
+  --paper: 252 251 248;       /* #FCFBF8 — warm canvas */
+  --card: 255 255 255;
+  --rule: 230 225 213;        /* #E6E1D5 — warm hairline */
+
+  --font-display: "InterVariable", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-body: "InterVariable", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  background-color: rgb(var(--paper));
+  color: rgb(var(--ink));
+  font-family: var(--font-body);
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  -webkit-font-smoothing: antialiased;
+}
+
+@supports not (font-variation-settings: normal) {
+  .tpl-emerald {
+    --font-display: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+}
+
+.tpl-emerald .font-display {
+  font-family: var(--font-display);
+}
+
+.tpl-emerald .reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+.tpl-emerald .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tpl-emerald .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ── Shared base ── */
+html {
+  scroll-behavior: smooth;
+}
+/* Offset in-page anchors for the emerald template's 72px sticky nav. */
+html:has(.tpl-emerald) {
+  scroll-padding-top: 72px;
 }
 
 html,
