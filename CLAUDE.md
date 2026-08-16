@@ -53,6 +53,7 @@ Current templates:
 | `src/sanity/lib/api.ts` | Env constants and studio URL |
 | `styles/variables.css` | Base font-family declarations |
 | `styles/globals.css` | Per-template tokens scoped under `.tpl-<key>` (+ shared base, fonts) |
+| `src/lib/seo.ts` | Template-agnostic SEO/GEO helpers: title/description builders, Person + ProfilePage JSON-LD |
 
 ### Design system
 
@@ -72,7 +73,17 @@ Theme-agnostic Radix primitives live in `src/components/ui/` (`card`, `separator
 
 ### Images
 
-All images are served from `cdn.sanity.io` via the Sanity image URL builder. The Next.js `<Image>` remote hostname is configured to allow this domain. CV falls back through: Sanity-linked asset → `cvUrl` field → `/public/nazmul_alam_cv.pdf`.
+All images are served from `cdn.sanity.io` via the Sanity image URL builder. The Next.js `<Image>` remote hostname is configured to allow this domain. CV falls back through: Sanity-linked asset → `cvUrl` field → `/public/nazmul_alam_cv.pdf`. Note: only the `classic` mapper currently exposes `cvUrl`, and neither template renders a CV/resume link in its UI — the fallback chain is documented but not wired up to any visible link yet.
+
+### SEO / GEO
+
+`pages/index.tsx` builds all page-level SEO tags from CMS data via `src/lib/seo.ts` (template-agnostic — reads the same `name`/`role`/`location`/`socials`/`skillGroups` fields both mappers produce):
+- Dynamic `<title>` and meta description (answer-first: leads with "`{name}` is a `{role}` based in `{location}`.") — falls back to a static default if Sanity data is unavailable.
+- `<link rel="canonical">` + Open Graph/Twitter tags, all resolved against `NEXT_PUBLIC_SITE_URL`. `PAGE_URL` (site URL + trailing slash) is the single literal form used everywhere a URL represents "this page," so canonical/og:url/JSON-LD `url` never disagree with each other or with `sitemap.xml`.
+- A dedicated 1200×630 OG image crop (separate from whatever portrait crop the active template uses), built in `getStaticProps` from the raw Sanity image.
+- `Person` + `ProfilePage` JSON-LD (schema.org) — `sameAs` from socials, `email` from the `mailto:` social, `knowsAbout` from skill groups, `alumniOf` from education, `dateModified` stamped per build/ISR revalidation.
+
+`public/robots.txt` and `public/sitemap.xml` are static (single-route site, so no dynamic sitemap generation is needed) — update the hardcoded domain in both if `NEXT_PUBLIC_SITE_URL` ever changes.
 
 ## Env vars
 
@@ -81,6 +92,7 @@ NEXT_PUBLIC_SANITY_PROJECT_ID=u3z7hv6o
 NEXT_PUBLIC_SANITY_DATASET=production
 NEXT_PUBLIC_SANITY_API_VERSION=2024-06-01
 NEXT_PUBLIC_PORTFOLIO_TEMPLATE=emerald   # which template to render: emerald (default) | classic
+NEXT_PUBLIC_SITE_URL=https://nazmul.monerbari.com   # canonical origin; used for canonical/OG URLs, JSON-LD, robots.txt's sitemap ref
 ```
 
 These are public (prefixed `NEXT_PUBLIC_`). `.env` is gitignored; the tracked template is `.env.example` — keep it in sync when adding vars. `NEXT_PUBLIC_PORTFOLIO_TEMPLATE` is inlined at build time — changing it requires a rebuild (`npm run build`), not just a restart of `npm run start`.
